@@ -3,10 +3,14 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
+using System.Transactions;
 using ExpenseTracker.Core.Dto;
+using ExpenseTracker.Core.Dto.Account;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
+using ExpenseTracker.Infrastructure.Crypter.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -16,12 +20,14 @@ namespace ExpenseTracker.Infrastructure.Services.Implementation
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly ICrypter _crypter;
         private readonly IConfiguration _configuration;
 
-        public UserService(IConfiguration configuration,IUserRepository userRepository)
+        public UserService(IConfiguration configuration,IUserRepository userRepository, ICrypter crypter)
         {
             _configuration = configuration;
             _userRepository = userRepository;
+            _crypter = crypter;
         }
 
         public AuthenticateResponseDto Authenticate(AuthenticateRequestDto model)
@@ -38,7 +44,15 @@ namespace ExpenseTracker.Infrastructure.Services.Implementation
                 ReturnUrl = model.ReturnUrl
             };
         }
-        
+
+        public async Task CreateUser(RegisterDto dto)
+        {
+            using var tsc = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            var user = new User(dto.FirstName, dto.LastName, dto.UserName, _crypter.Hash(dto.Password));
+            await _userRepository.InsertAsync(user);
+            tsc.Complete();
+        }
+
         private string GenerateJwtToken(User user)
         {
             var claims = new Claim[] {

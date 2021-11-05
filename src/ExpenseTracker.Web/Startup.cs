@@ -44,34 +44,34 @@ namespace ExpenseTracker.Web
             );
 
             services.Configure<CookieTempDataProviderOptions>(options => { options.Cookie.IsEssential = true; });
-            
-            
+
+
             var key = Encoding.ASCII.GetBytes(Configuration.GetSecret());
-            
+
             services.AddAuthentication(
-                x =>
-                {
-                    x.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    x.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    x.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                }
-            ).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
-                x =>
-                {
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
+                    x =>
                     {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                }
-            );
-            
+                        x.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        x.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        x.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        x.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    }
+                ).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
+                    x =>
+                    {
+                        x.RequireHttpsMetadata = false;
+                        x.SaveToken = true;
+                        x.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(key),
+                            ValidateIssuer = false,
+                            ValidateAudience = false
+                        };
+                    }
+                );
+
             services.AddAuthorization(
                 options =>
                 {
@@ -84,12 +84,9 @@ namespace ExpenseTracker.Web
                     options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
                 }
             );
-            
+
             services.AddControllersWithViews(
-                opt =>
-                {
-                    opt.Filters.Add(typeof(ViewBagInjector));
-                });
+                opt => { opt.Filters.Add(typeof(ViewBagInjector)); });
 
             services.AddSession(
                 options =>
@@ -100,18 +97,21 @@ namespace ExpenseTracker.Web
                     options.IdleTimeout = TimeSpan.FromMinutes(3);
                 }
             );
-            
+
             services.AddMvc().AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-            }).AddRazorRuntimeCompilation()
-            .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-            
+                {
+                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                }).AddRazorRuntimeCompilation()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore)
+                .AddRazorRuntimeCompilation();
+
             services.AddHttpContextAccessor();
-            
+
             services.InjectCoreServices();
             services.InjectServices();
             services.InjectRepositories();
+            services.InjectCrypter();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -119,9 +119,9 @@ namespace ExpenseTracker.Web
         {
             var httpAccessor = serviceProvider.GetService<IHttpContextAccessor>();
             BaseSessionFactory.HttpContextAccessor = httpAccessor;
-            
+
             ServiceActivator.Configure(app.ApplicationServices);
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -133,25 +133,25 @@ namespace ExpenseTracker.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
+
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
-            
+
             app.UseStaticFiles();
-            
+
             app.UseCookiePolicy();
 
             app.UseRouting();
-            
+
             app.UseAuthentication();
 
             app.UseAuthorization();
 
             app.UseSession();
-            
+
             app.UseWorkspaceMiddleware();
 
             app.UseEndpoints(endpoints =>

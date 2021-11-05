@@ -21,7 +21,7 @@ namespace ExpenseTracker.Infrastructure.SessionFactory
 
         static BaseSessionFactory()
         {
-            var connectionString = "Server=localhost; port=5432; Username=postgres; Password=admin; Database=expense_tracker";
+            var connectionString = "Server=localhost; port=5432; Username=postgres; Password=dev; Database=expense_tracker";
             lock (LockObject)
             {
                 if (_sessionFactory != null) return;

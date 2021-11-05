@@ -8,7 +8,7 @@ namespace ExpenseTracker.UnitTests.Entity
         [Fact]
         public void test_protected_property_sets_correct_value()
         {
-            var user = User.Create("admin", "admin");
+            var user = new User("FirstName", "LastName", "Admin", "Admin");
 
             typeof(User).GetProperty(nameof(User.Id))?
                 .SetValue(user, 1);
@@ -19,23 +19,20 @@ namespace ExpenseTracker.UnitTests.Entity
             Assert.Equal("ad", user.Username);
             Assert.Equal("psd", user.Password);
             Assert.Equal(1, user.Id);
-
         }
+
         [Fact]
         public void test_Set_User_Name_sets_correct_value()
         {
-            var user = User.Create("admin", "admin");
-            user.SetUserName("aa");
+            var user = new User("FirstName", "LastName", "Admin", "Admin");
             Assert.Equal("aa", user.Username);
-
         }
+
         [Fact]
         public void test_Set_User_pass_sets_correct_value()
         {
-            var user = User.Create("admin", "admin");
-            user.SetPassword("aa");
+            var user = new User("FirstName", "LastName", "Admin", "Admin");
             Assert.Equal("aa", user.Password);
-
         }
     }
 }
