@@ -1,5 +1,3 @@
-using System;
-
 namespace ExpenseTracker.Web.Models
 {
     public class ErrorViewModel
