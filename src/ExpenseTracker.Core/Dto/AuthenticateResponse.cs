@@ -1,5 +1,3 @@
-using User = ExpenseTracker.Core.Entities.User;
-
 namespace ExpenseTracker.Core.Dto
 {
     public class AuthenticateResponseDto
@@ -14,7 +12,7 @@ namespace ExpenseTracker.Core.Dto
         public string ReturnUrl { get; set; } = "/";
 
 
-        public AuthenticateResponseDto(User user, string token)
+        public AuthenticateResponseDto(Entities.User user, string token)
         {
             Id = user.Id;
             FirstName = user.FirstName;

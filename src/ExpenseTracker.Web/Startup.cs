@@ -56,28 +56,28 @@ namespace ExpenseTracker.Web
             var key = Encoding.ASCII.GetBytes(Configuration.GetSecret());
 
             services.AddAuthentication(
-                x =>
-                {
-                    x.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    x.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    x.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                }
-            ).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
-                x =>
-                {
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
+                    x =>
                     {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                }
-            );
+                        x.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        x.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        x.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        x.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    }
+                ).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
+                    x =>
+                    {
+                        x.RequireHttpsMetadata = false;
+                        x.SaveToken = true;
+                        x.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(key),
+                            ValidateIssuer = false,
+                            ValidateAudience = false
+                        };
+                    }
+                );
 
             services.AddAuthorization(
                 options =>
@@ -110,10 +110,11 @@ namespace ExpenseTracker.Web
             );
 
             services.AddMvc().AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-            }).AddRazorRuntimeCompilation()
-            .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+                {
+                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                }).AddRazorRuntimeCompilation()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore).AddRazorRuntimeCompilation();
 
             services.AddHttpContextAccessor();
             services.AddScoped<DbContext, AppDbContext>();
@@ -122,6 +123,7 @@ namespace ExpenseTracker.Web
             services.InjectCoreServices();
             services.InjectServices();
             services.InjectRepositories();
+            services.InjectCrypterServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -33,6 +33,7 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
         public async Task InsertAsync(T entities)
         {
             await _currentSession.AddAsync(entities).ConfigureAwait(false);
+            await _context.SaveChangesAsync();
         }
 
         public void Update(T entities)
@@ -64,7 +65,7 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
         {
             return await _currentSession.FindAsync(id);
         }
-        
+
         public IQueryable<T> GetPredicatedQueryable(Expression<Func<T, bool>>? predicate)
         {
             return predicate == null ? GetQueryable() : GetQueryable().Where(predicate);
@@ -75,7 +76,6 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
             return await GetPredicatedQueryable(predicate)
                 .CountAsync()
                 .ConfigureAwait(false) != 0;
-            
         }
 
         public Pagination<T> Paginate(IQueryable<T> queryable, int page = 1, int limit = 100)
