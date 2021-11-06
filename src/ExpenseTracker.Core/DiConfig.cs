@@ -1,4 +1,5 @@
 using ExpenseTracker.Common.DBAL;
+using ExpenseTracker.Core.Crypter;
 using ExpenseTracker.Core.Services.Implementation;
 using ExpenseTracker.Core.Services.Interface;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,5 +16,7 @@ namespace ExpenseTracker.Core
             services.AddScoped<IUow, Uow>();
         }
 
+        public static void InjectCrypterServices(this IServiceCollection services) 
+            => services.AddScoped<ICrypter, Crypter.Crypter>();
     }
 }

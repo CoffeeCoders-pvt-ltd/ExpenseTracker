@@ -10,7 +10,7 @@ namespace ExpenseTracker.UnitTests.Entity
         [Fact]
         public void test_protected_property_sets_correct_value()
         {
-            var user = User.Create("admin", "admin");
+            var user = new User("firstname", "lastname", "admin", "admin");
             var workspace = Workspace.Create(user, "apt", "red");
             var category = TransactionCategory.Create(TransactionType.Income, "cat", "red", "ico");
 
@@ -25,31 +25,30 @@ namespace ExpenseTracker.UnitTests.Entity
             Assert.Equal(19.0M, transaction.Amount);
             Assert.Equal(1, transaction.WorkspaceId);
             Assert.Equal(1, transaction.TransactionCategoryId);
-
         }
+
         [Fact]
-        public void test_Update_transasction_date_updates_correct_date()
+        public void test_Update_transaction_date_updates_correct_date()
         {
-            var user = User.Create("admin", "admin");
+            var user = new User("firstname", "lastname", "admin", "admin");
             var workspace = Workspace.Create(user, "apt", "red");
             var category = TransactionCategory.Create(TransactionType.Income, "cat", "red", "ico");
             var transaction = Transaction.Create(workspace, category, 10, System.DateTime.Now, TransactionType.Income);
 
             transaction.UpdateTransactionDate(DateTime.Now);
             Assert.Equal(DateTime.Now.Date, transaction.TransactionDate.Date);
-
         }
+
         [Fact]
-        public void test_Update_transasction_amount_updates_correct_amount()
+        public void test_Update_transaction_amount_updates_correct_amount()
         {
-            var user = User.Create("admin", "admin");
+            var user = new User("firstname", "lastname", "admin", "admin");
             var workspace = Workspace.Create(user, "apt", "red");
             var category = TransactionCategory.Create(TransactionType.Income, "cat", "red", "ico");
             var transaction = Transaction.Create(workspace, category, 10, System.DateTime.Now, TransactionType.Income);
 
             transaction.UpdateAmount(111);
             Assert.Equal(111M, transaction.Amount);
-
         }
     }
 }
