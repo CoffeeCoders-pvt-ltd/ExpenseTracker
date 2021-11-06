@@ -31,7 +31,7 @@ namespace ExpenseTracker.Core.Entities
         public virtual void ChangeName(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new Exception("Invalid Workspace name.");
-            WorkSpaceName = name;
+            WorkSpaceName = char.ToUpper(name[0]) + name.Substring(1);
         }
 
         public virtual string Color { get; protected set; }
