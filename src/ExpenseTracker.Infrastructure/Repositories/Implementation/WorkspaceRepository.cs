@@ -25,7 +25,7 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<List<Workspace>> GetActiveWorkspace(User user)
+        public async Task<List<Workspace>> GetActiveWorkspaces(User user)
             => await GetAllAsync(x => x.User == user && x.Status == Constant.StatusActive);
     }
 }

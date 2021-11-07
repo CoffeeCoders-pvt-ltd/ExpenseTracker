@@ -34,7 +34,7 @@ namespace ExpenseTracker.Web.Controllers
             var currentUser = await _userProvider.GetCurrentUser();
             var workspaceViewModel = new WorkspaceIndexViewModel
             {
-                Workspaces = await _workspaceRepository.GetActiveWorkspace(currentUser)
+                Workspaces = await _workspaceRepository.GetActiveWorkspaces(currentUser)
             };
             return View(workspaceViewModel);
         }
