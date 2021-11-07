@@ -63,18 +63,12 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
         {
             return _currentSession.Find(id);
         }
-        
-        public IQueryable<T> GetPredicatedQueryable(Expression<Func<T, bool>>? predicate)
-        {
-            return predicate == null ? GetQueryable() : GetQueryable().Where(predicate);
-        }
 
-        public async Task<bool> CheckIfExistAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await GetPredicatedQueryable(predicate)
-                .CountAsync()
-                .ConfigureAwait(false) != 0;
-        }
+        public IQueryable<T> GetPredicatedQueryable(Expression<Func<T, bool>>? predicate)
+            => predicate == null ? GetQueryable() : GetQueryable().Where(predicate);
+
+        public async Task<bool> CheckIfExistAsync(Expression<Func<T, bool>> predicate) =>
+            await _currentSession.AnyAsync(predicate);
 
         public Pagination<T> Paginate(IQueryable<T> queryable, int page = 1, int limit = 100)
         {

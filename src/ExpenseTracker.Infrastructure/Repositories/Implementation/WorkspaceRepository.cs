@@ -13,7 +13,7 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
         {
         }
 
-        public async Task<Workspace> GetDefaultWorkspace(long userId) 
+        public async Task<Workspace> GetDefaultWorkspace(long userId)
             => await GetPredicatedQueryable(a =>
                     a.WorkspaceType == Workspace.TypeDefaultWorkspace && a.UserId == userId)
                 .SingleOrDefaultAsync();
@@ -26,5 +26,10 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
 
         public async Task<List<Workspace>> GetActiveWorkspaces(long userId)
             => await GetAllAsync(x => x.UserId == userId && x.Status == StatusConstants.StatusActive);
+
+        public async Task<bool> HasDefaultWorkspace(long userId)
+            => await CheckIfExistAsync(w =>
+                w.WorkspaceType == Workspace.TypeDefaultWorkspace && w.Status == StatusConstants.StatusActive &&
+                w.UserId == userId);
     }
 }

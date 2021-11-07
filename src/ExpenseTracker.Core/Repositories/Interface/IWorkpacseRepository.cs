@@ -11,5 +11,6 @@ namespace ExpenseTracker.Core.Repositories.Interface
         Task<Workspace> GetByToken(string token);
 
         Task<List<Workspace>> GetActiveWorkspaces(long userId);
+        Task<bool> HasDefaultWorkspace(long userId);
     }
 }

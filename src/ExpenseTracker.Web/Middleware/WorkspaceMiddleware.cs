@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExpenseTracker.Common.Constants;
+using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Web.Provider;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -27,17 +28,20 @@ namespace ExpenseTracker.Web.Middleware
             _next = next;
         }
 
-        public async Task Invoke(HttpContext httpContext, IUserProvider userProvider)
+        public async Task Invoke(HttpContext httpContext, IUserProvider userProvider, IWorkspaceRepository workspaceRepository)
         {
             var currentRequestPath = httpContext.Request.Path;
 
-            var currentUser = await userProvider.GetCurrentUser();
+            var currentUserId = userProvider.GetCurrentUserId();
 
-            if (currentUser != null && currentUser.Workspaces.All(w => w.Status != StatusConstants.StatusActive) &&
-                !currentUser.Workspaces.Any(a => a.IsDefault) && !PathsToAvoid.Contains(currentRequestPath))
+            if (!PathsToAvoid.Contains(currentRequestPath) && currentUserId != null)
             {
-                httpContext.Response.Redirect(WorkspaceCreateUrl);
-                return;
+                var hasDefaultWorkspace = await workspaceRepository.HasDefaultWorkspace(currentUserId);
+                if (!hasDefaultWorkspace)
+                {
+                    httpContext.Response.Redirect(WorkspaceCreateUrl);
+                    return;
+                }
             }
 
             await _next(httpContext);

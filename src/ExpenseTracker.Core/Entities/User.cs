@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text.Json.Serialization;
+using ExpenseTracker.Common.Constants;
 using ExpenseTracker.Common.Model;
 
 namespace ExpenseTracker.Core.Entities
@@ -33,7 +34,8 @@ namespace ExpenseTracker.Core.Entities
         public virtual bool HasWorkspace => Workspaces.Any();
 
         public virtual bool HasDefaultWorkspace =>
-            Workspaces.Count(a => a.WorkspaceType == Workspace.TypeDefaultWorkspace) == 1;
+            Workspaces.Count(a =>
+                a.WorkspaceType == Workspace.TypeDefaultWorkspace && a.Status == StatusConstants.StatusActive) == 1;
 
         public virtual Workspace DefaultWorkspace =>
             (HasDefaultWorkspace
