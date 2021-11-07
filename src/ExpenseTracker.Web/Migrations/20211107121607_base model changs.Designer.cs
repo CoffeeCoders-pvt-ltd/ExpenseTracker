@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpenseTracker.Web.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211106143004_status added")]
-    partial class statusadded
+    [Migration("20211107121607_base model changs")]
+    partial class basemodelchangs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,13 +31,16 @@ namespace ExpenseTracker.Web.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("EntryDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("Constant")
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -78,11 +81,14 @@ namespace ExpenseTracker.Web.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Icon")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Constant")
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -102,6 +108,9 @@ namespace ExpenseTracker.Web.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -114,7 +123,7 @@ namespace ExpenseTracker.Web.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Constant")
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -141,10 +150,13 @@ namespace ExpenseTracker.Web.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<string>("Constant")
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
 

@@ -1,6 +1,7 @@
 @using ExpenseTracker.Core.Entities
 @using ExpenseTracker.Infrastructure.Extensions
 @using ExpenseTracker.Common.Model
+@using ExpenseTracker.Common.Constants
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @{
     var session = HttpContextAccessor.HttpContext.Session;
@@ -33,7 +34,7 @@
             <div class="dropdown-menu-columns">
                 <div class="dropdown-menu-column">
 
-                    @foreach (var workspace in workspaces.FindAll(x => x.Status == BaseModel.StatusActive))
+                    @foreach (var workspace in workspaces.FindAll(x => x.Status == Constant.StatusActive))
                     {
                         var href = "#";
                         if (!workspace.IsDefault)

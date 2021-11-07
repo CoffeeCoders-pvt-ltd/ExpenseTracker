@@ -104,6 +104,7 @@ namespace ExpenseTracker.Core.Services.Implementation
         public async Task Deactivate(Workspace workspace)
         {
             using var tsc = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            if (workspace.IsDefault) throw new Exception("Unable to remove default workspace");
             workspace.Deactivate();
             await _uow.CommitAsync();
             tsc.Complete();

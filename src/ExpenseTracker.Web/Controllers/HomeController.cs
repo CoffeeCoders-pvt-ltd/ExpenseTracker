@@ -34,14 +34,7 @@ namespace ExpenseTracker.Web.Controllers
 
         public async Task<IActionResult> Index(HomeViewModel homeViewModel)
         {
-            var workspaces = (await userProvider.GetCurrentUser()).Workspaces;
-            if (!workspaces.Any(x => x.Status == BaseModel.StatusActive))
-            {
-                return Redirect("/Workspace/Create");
-            }
-
             var workspaceToken = (await userProvider.GetCurrentUser()).DefaultWorkspace.Token;
-
             var transactionQueryable =
                 _transactionRepository.GetPredicatedQueryable(a => a.Workspace.Token == workspaceToken);
 

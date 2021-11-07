@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using ExpenseTracker.Common.Constants;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -22,5 +24,8 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
             return await GetPredicatedQueryable(a => a.Token == token)
                 .SingleOrDefaultAsync();
         }
+
+        public async Task<List<Workspace>> GetActiveWorkspace(User user)
+            => await GetAllAsync(x => x.User == user && x.Status == Constant.StatusActive);
     }
 }

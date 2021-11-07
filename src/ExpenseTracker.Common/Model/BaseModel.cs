@@ -1,32 +1,27 @@
 using System;
+using ExpenseTracker.Common.Constants;
 
 namespace ExpenseTracker.Common.Model
 {
     public abstract class BaseModel : IBaseModel
     {
-
-        public const string StatusActive = "Active";
-        public const string StatusInactive = "Inactive";
-        public const string StatusDeleted = "Deleted";
-
-        public static readonly string[] StatusList = new[] { StatusActive, StatusInactive, StatusDeleted };
         public long Id { get; set; }
-        public DateTime CreatedDate { get; set; } = Convert.ToDateTime(DateTime.Now.ToShortDateString());
-        public string Status { get; set; } = StatusActive;
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public string Status { get; set; } = Constant.StatusActive;
 
         public virtual IBaseModel Activate()
         {
-            Status = StatusActive;
+            Status = Constant.StatusActive;
             return this;
         }
 
         public virtual IBaseModel Deactivate()
         {
-            Status = StatusInactive;
+            Status = Constant.StatusInactive;
             return this;
         }
 
-        public bool IsActive() => Status == StatusActive;
+        public bool IsActive() => Status == Constant.StatusActive;
 
         public virtual void ToggleStatus()
         {

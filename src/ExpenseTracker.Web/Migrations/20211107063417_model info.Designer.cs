@@ -40,7 +40,7 @@ namespace ExpenseTracker.Web.Migrations
                     b.Property<DateTime>("EntryDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("Constant")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -88,7 +88,7 @@ namespace ExpenseTracker.Web.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("Constant")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -123,7 +123,7 @@ namespace ExpenseTracker.Web.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("Constant")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -156,7 +156,7 @@ namespace ExpenseTracker.Web.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("Constant")
                         .IsRequired()
                         .HasColumnType("text");
 
