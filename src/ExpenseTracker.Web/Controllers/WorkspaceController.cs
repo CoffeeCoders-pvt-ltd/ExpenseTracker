@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ExpenseTracker.Common.Model;
 using ExpenseTracker.Core.Dto.Workspace;
@@ -50,7 +51,7 @@ namespace ExpenseTracker.Web.Controllers
             {
                 if (!ModelState.IsValid) return View(workspaceViewModel);
 
-                var currentUser = await this.GetCurrentUser().ConfigureAwait(true);
+                var currentUser = await GetCurrentUser().ConfigureAwait(true);
                 var workspaceDto = new WorkspaceCreateDto()
                 {
                     UserId = currentUser.Id,
@@ -100,9 +101,21 @@ namespace ExpenseTracker.Web.Controllers
             try
             {
                 var workshop = await _workspaceRepository.FindOrThrowAsync(id);
+                var currentUser = await _userProvider.GetCurrentUser();
                 await _workspaceService.Deactivate(workshop);
+                var activeWorkspaces =
+                    await _workspaceRepository.GetAllAsync(w =>
+                        w.User == currentUser && w.Status == BaseModel.StatusActive);
+                if (activeWorkspaces.Count is 0)
+                {
+                    this.AddSuccessMessage("successfully moved to the trash");
+                    return RedirectToAction(nameof(Create));
+                }
+
+                var availableToken = activeWorkspaces.FirstOrDefault();
+                await ChangeDefault(availableToken.Token);
                 this.AddSuccessMessage("successfully moved to the trash");
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)); 
             }
             catch (Exception e)
             {
