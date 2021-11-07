@@ -54,7 +54,7 @@ namespace ExpenseTracker.Infrastructure.Services.Implementation
         {
             using var tsc = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             var user = new User(dto.FirstName, dto.LastName, dto.UserName, _crypter.Hash(dto.Password));
-            await _userRepository.InsertAsync(user);
+            await _userRepository.CreateAsync(user);
             tsc.Complete();
         }
 

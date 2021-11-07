@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using ExpenseTracker.Common.DBAL;
 using ExpenseTracker.Core.Dto.TransactionCategory;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Entities.Common;
@@ -20,7 +21,7 @@ namespace ExpenseTracker.UnitTests.Service
 
         public TransactionCategoryServiceTest()
         {
-            _transactionCategoryService = new TransactionCategoryService(_transactionCategoryRepository.Object);
+            _transactionCategoryService = new TransactionCategoryService(_transactionCategoryRepository.Object, Mock.Of<IUow>());
         }
 
         [Fact]
@@ -36,7 +37,7 @@ namespace ExpenseTracker.UnitTests.Service
 
             _transactionCategoryService.Create(transactionCategoryCreateDto);
 
-            _transactionCategoryRepository.Verify(a => a.InsertAsync(It.Is<TransactionCategory>(x =>
+            _transactionCategoryRepository.Verify(a => a.CreateAsync(It.Is<TransactionCategory>(x =>
                 x.Type == TransactionType.Expense &&
                 x.CategoryName == "Office Expense" &&
                 x.Icon == "office" &&

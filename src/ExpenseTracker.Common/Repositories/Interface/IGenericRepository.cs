@@ -7,11 +7,11 @@ using ExpenseTracker.Common.Pagination;
 
 namespace ExpenseTracker.Common.Repositories.Interface
 {
-   public interface IGenericRepository<T>
+    public interface IGenericRepository<T>
     {
         void Delete(T entities);
-        void Insert(T entities);
-        Task InsertAsync(T entities);
+        void Create(T entities);
+        Task CreateAsync(T entities);
         void Update(T entities);
         IList<T> GetAll();
         Task<IList<T>> GetAllAsync();
@@ -21,7 +21,7 @@ namespace ExpenseTracker.Common.Repositories.Interface
         Task<T?> GetByIdAsync(long id);
 
         Task<bool> CheckIfExistAsync(Expression<Func<T, bool>> predicate);
-        
+
         Pagination<T> Paginate(IQueryable<T> queryable, int page = 1, int limit = 100);
     }
 }

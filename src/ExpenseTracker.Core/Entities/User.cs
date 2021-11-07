@@ -10,18 +10,6 @@ namespace ExpenseTracker.Core.Entities
     [Table("user", Schema = "core")]
     public class User : BaseModel
     {
-        // protected User() { }
-
-        // public static User Create(string userName, string password)
-        // {
-        //     return new User(userName, password);
-        // }
-        // private User(string username, string password)
-        // {
-        //     SetUserName(username);
-        //     SetPassword(password);
-        // }
-
         protected User()
         {
         }
@@ -39,30 +27,6 @@ namespace ExpenseTracker.Core.Entities
         public string Username { get; protected set; }
 
         public string Password { get; protected set; }
-        // public virtual void SetUserName(string userName)
-        // {
-        //     //validation for the username
-        //     if (string.IsNullOrWhiteSpace(userName))
-        //     {
-        //         //todo: change to custom exception
-        //         throw new Exception("Username Not Valid.");
-        //     }
-        //     Username = userName;
-        // }
-
-        // [JsonIgnore]
-
-
-        // public virtual void SetPassword(string password)
-        // {
-        //     //validation for the password
-        //     if (string.IsNullOrWhiteSpace(password))
-        //     {
-        //         //todo: change to custom exception
-        //         throw new Exception("Username Not Valid.");
-        //     }
-        //     Password = password;
-        // }
 
         public virtual List<Workspace> Workspaces { get; set; } = new List<Workspace>();
 

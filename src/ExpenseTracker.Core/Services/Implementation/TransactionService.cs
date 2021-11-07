@@ -35,7 +35,7 @@ namespace ExpenseTracker.Core.Services.Implementation
                 transactionCreateDto.Type);
             transaction.Description = transactionCreateDto.Description;
 
-            await _transactionRepository.InsertAsync(transaction).ConfigureAwait(false);
+            await _transactionRepository.CreateAsync(transaction).ConfigureAwait(false);
             await _uow.CommitAsync();
             Tx.Complete();
         }

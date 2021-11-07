@@ -4,9 +4,7 @@ namespace ExpenseTracker.Common.Helpers
 {
     public static class TransactionScopeHelper
     {
-        public static TransactionScope GetInstance()
-        {
-            return new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-        }
+        public static TransactionScope GetInstance() 
+            => new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
     }
 }
