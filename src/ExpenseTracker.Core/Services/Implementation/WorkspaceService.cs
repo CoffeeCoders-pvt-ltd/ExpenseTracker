@@ -2,13 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 using ExpenseTracker.Common.DBAL;
 using ExpenseTracker.Common.Helpers;
+using ExpenseTracker.Common.Model;
 using ExpenseTracker.Core.Dto.Workspace;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Exceptions;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Core.Services.Implementation
 {
@@ -24,11 +27,13 @@ namespace ExpenseTracker.Core.Services.Implementation
             _userRepository = userRepository;
             _uow = uow;
         }
+
         public async Task Create(WorkspaceCreateDto workspaceCreateDto)
         {
             using var tx = TransactionScopeHelper.GetInstance();
 
-            var user = await _userRepository.GetByIdAsync(workspaceCreateDto.UserId).ConfigureAwait(false) ?? throw new Exception("User not found exception");
+            var user = await _userRepository.GetByIdAsync(workspaceCreateDto.UserId).ConfigureAwait(false) ??
+                       throw new Exception("User not found exception");
 
             var workspace = Workspace.Create(user, workspaceCreateDto.Name, workspaceCreateDto.Color);
 
@@ -80,21 +85,37 @@ namespace ExpenseTracker.Core.Services.Implementation
         public async Task ChangeDefault(string workspaceToken)
         {
             using var tx = TransactionScopeHelper.GetInstance();
-
-            var selectedWorkspace = await _workspaceRepository.GetByToken(workspaceToken).ConfigureAwait(false) ??
-                            throw new WorkspaceNotFoundException();
-
-            var userWorkspaces = _workspaceRepository
-                .GetPredicatedQueryable(a => a.UserId == selectedWorkspace.UserId).ToList();
+            var selectedWorkspace = await _workspaceRepository.GetByToken(workspaceToken).ConfigureAwait(false);
+            
+            var userWorkspaces = await _workspaceRepository
+                .GetPredicatedQueryable(a => a.UserId == selectedWorkspace.UserId)
+                .ToListAsync();
+            
 
             foreach (var workspace in userWorkspaces.Except(new List<Workspace> { selectedWorkspace }))
             {
                 workspace.SetAsNormalWorkspace();
             }
+
             selectedWorkspace.SetAsDefaultWorkspace();
             await _uow.CommitAsync();
-
             tx.Complete();
+        }
+
+        public async Task DeactivateWorkspace(Workspace workspace)
+        {
+            using var tsc = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            workspace.Deactivate();
+            await _uow.CommitAsync();
+            tsc.Complete();
+        }
+
+        public async Task ActivateWorkspace(Workspace workspace)
+        {
+            using var tsc = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            workspace.Activate();
+            await _uow.CommitAsync();
+            tsc.Complete();
         }
     }
 }

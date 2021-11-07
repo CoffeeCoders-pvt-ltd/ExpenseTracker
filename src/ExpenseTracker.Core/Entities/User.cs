@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text.Json.Serialization;
 using ExpenseTracker.Common.Model;
 
 namespace ExpenseTracker.Core.Entities
@@ -37,8 +36,10 @@ namespace ExpenseTracker.Core.Entities
 
         public virtual Workspace DefaultWorkspace =>
             (HasDefaultWorkspace
-                ? Workspaces.FirstOrDefault(a => a.WorkspaceType == Workspace.TypeDefaultWorkspace)
-                : throw new Exception("Default Workspace Not Found")) ??
+                ? Workspaces.FirstOrDefault(a =>
+                    a.WorkspaceType == Workspace.TypeDefaultWorkspace && a.Status == StatusActive)
+                : Workspaces.FirstOrDefault(a =>
+                    a.WorkspaceType == Workspace.TypeNormalWorkspace && a.Status == StatusActive)) ??
             throw new Exception("Default Workspace Not Found");
 
         public virtual void AddWorkspace(Workspace workspace)

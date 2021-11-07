@@ -14,12 +14,13 @@ namespace ExpenseTracker.Common.Repositories.Interface
         Task CreateAsync(T entities);
         void Update(T entities);
         IList<T> GetAll();
-        Task<IList<T>> GetAllAsync();
+        Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null);
         IQueryable<T> GetPredicatedQueryable(Expression<Func<T, bool>>? predicate);
         IQueryable<T> GetQueryable();
         T GetById(long id);
         Task<T?> GetByIdAsync(long id);
-
+        Task<T> FindOrThrowAsync(long id);
+        Task<T> FindAsync(long id);
         Task<bool> CheckIfExistAsync(Expression<Func<T, bool>> predicate);
 
         Pagination<T> Paginate(IQueryable<T> queryable, int page = 1, int limit = 100);

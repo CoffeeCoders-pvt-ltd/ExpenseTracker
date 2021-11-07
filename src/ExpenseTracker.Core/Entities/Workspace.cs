@@ -8,7 +8,7 @@ namespace ExpenseTracker.Core.Entities
     public class Workspace : BaseModel
     {
         public const string TypeDefaultWorkspace = "DEFAULT_WORKSPACE";
-        public const string TypeNormalWorkspace = "NORMAL_WORKSPACE";
+            public const string TypeNormalWorkspace = "NORMAL_WORKSPACE";
 
         protected Workspace() { }
 
