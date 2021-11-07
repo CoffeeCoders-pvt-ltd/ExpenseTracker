@@ -20,6 +20,13 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
             _currentSession = _context.Set<T>();
         }
 
+        public async Task<T> FindAsync(long id) => await _currentSession.FindAsync(id);
+
+
+        public async Task<T> FindOrThrowAsync(long id)
+            => await FindAsync(id) ?? throw new Exception("404 NOT FOUND");
+
+
         public void Delete(T entities)
         {
             _currentSession.Remove(entities);
@@ -33,7 +40,6 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
         public async Task InsertAsync(T entities)
         {
             await _currentSession.AddAsync(entities).ConfigureAwait(false);
-            await _context.SaveChangesAsync();
         }
 
         public void Update(T entities)
@@ -43,13 +49,16 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
 
         public IList<T> GetAll()
         {
-            return _currentSession.ToList();
+            throw new NotImplementedException();
         }
 
-        public async Task<IList<T>> GetAllAsync()
+
+        public Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null)
         {
-            return await _currentSession.ToListAsync();
+            predicate ??= x => true;
+            return _context.Set<T>().Where(predicate).ToListAsync();
         }
+        
 
         public IQueryable<T> GetQueryable()
         {

@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using ExpenseTracker.Common.DBAL;
 using ExpenseTracker.Core.Crypter;
 using ExpenseTracker.Core.Dto;
 using ExpenseTracker.Core.Dto.User;
@@ -21,13 +22,15 @@ namespace ExpenseTracker.Infrastructure.Services.Implementation
     {
         private readonly IUserRepository _userRepository;
         private readonly ICrypter _crypter;
+        private readonly IUow _uow;
         private readonly IConfiguration _configuration;
 
-        public UserService(IConfiguration configuration, IUserRepository userRepository, ICrypter crypter)
+        public UserService(IConfiguration configuration, IUserRepository userRepository, ICrypter crypter, IUow uow)
         {
             _configuration = configuration;
             _userRepository = userRepository;
             _crypter = crypter;
+            _uow = uow;
         }
 
         public AuthenticateResponseDto Authenticate(AuthenticateRequestDto model)
@@ -40,7 +43,7 @@ namespace ExpenseTracker.Infrastructure.Services.Implementation
             {
                 throw new Exception("Invalid password");
             }
-            
+
             var token = GenerateJwtToken(user);
 
             return new AuthenticateResponseDto(user, token)
@@ -55,6 +58,7 @@ namespace ExpenseTracker.Infrastructure.Services.Implementation
             using var tsc = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             var user = new User(dto.FirstName, dto.LastName, dto.UserName, _crypter.Hash(dto.Password));
             await _userRepository.InsertAsync(user);
+            await _uow.CommitAsync();
             tsc.Complete();
         }
 

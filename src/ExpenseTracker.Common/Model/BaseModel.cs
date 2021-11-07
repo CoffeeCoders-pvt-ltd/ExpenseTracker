@@ -1,12 +1,36 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ExpenseTracker.Common.Model
 {
-    public class BaseModel
+    public abstract class BaseModel : IBaseModel
     {
-        public virtual long Id { get; set; }
+        public const string StatusActive = "Active";
+        public const string StatusInactive = "Inactive";
+        public const string StatusDeleted = "Deleted";
+
+        public static readonly string[] StatusList = new[] { StatusActive, StatusInactive, StatusDeleted };
+        public long Id { get; set; }
+        public DateTime CreatedDate { get; set; } = Convert.ToDateTime(DateTime.Now.ToShortDateString());
+        public string Status { get; set; } = StatusActive;
+
+        public virtual IBaseModel Activate()
+        {
+            Status = StatusActive;
+            return this;
+        }
+
+        public virtual IBaseModel Deactivate()
+        {
+            Status = StatusInactive;
+            return this;
+        }
+
+        public bool IsActive() => Status == StatusActive;
+
+        public virtual void ToggleStatus()
+        {
+            if (IsActive()) Deactivate();
+            else Activate();
+        }
     }
 }
