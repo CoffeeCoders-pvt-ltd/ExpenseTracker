@@ -25,7 +25,7 @@ namespace ExpenseTracker.Core.Services.Implementation
 
             var transaction = TransactionCategory.Create(transactionCategoryCreateDto.Type, transactionCategoryCreateDto.Name, transactionCategoryCreateDto.Color,
                 transactionCategoryCreateDto.Icon);
-            await _transactionCategoryRepository.InsertAsync(transaction).ConfigureAwait(false);
+            await _transactionCategoryRepository.CreateAsync(transaction).ConfigureAwait(false);
             await _uow.CommitAsync();
             tx.Complete();
         }

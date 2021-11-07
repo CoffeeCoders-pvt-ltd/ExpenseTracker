@@ -32,12 +32,12 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
             _currentSession.Remove(entities);
         }
 
-        public void Insert(T entities)
+        public void Create(T entities)
         {
             _currentSession.Add(entities);
         }
 
-        public async Task InsertAsync(T entities)
+        public async Task CreateAsync(T entities)
         {
             await _currentSession.AddAsync(entities).ConfigureAwait(false);
         }
