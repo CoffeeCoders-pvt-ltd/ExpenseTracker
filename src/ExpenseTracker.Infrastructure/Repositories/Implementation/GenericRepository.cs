@@ -24,7 +24,7 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
 
 
         public async Task<T> FindOrThrowAsync(long id)
-            => await FindAsync(id) ?? throw new Exception("404 NOT FOUND");
+            => await FindAsync(id) ?? throw new Exception("Request item not found");
 
 
         public void Delete(T entities)
@@ -59,7 +59,7 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
             return _currentSession.AsQueryable();
         }
 
-        public T GetById(long id)
+        public T Find(long id)
         {
             return _currentSession.Find(id);
         }

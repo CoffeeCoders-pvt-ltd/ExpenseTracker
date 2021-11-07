@@ -7,7 +7,7 @@ namespace ExpenseTracker.Core.Repositories.Interface
 {
     public interface IWorkspaceRepository : IGenericRepository<Workspace>
     {
-        Task<Workspace> GetDefaultWorkspace();
+        Task<Workspace> GetDefaultWorkspace(long userId);
         Task<Workspace> GetByToken(string token);
 
         Task<List<Workspace>> GetActiveWorkspaces(long userId);
