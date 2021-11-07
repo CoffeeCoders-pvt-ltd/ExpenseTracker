@@ -22,7 +22,7 @@ namespace ExpenseTracker.Web.Provider
 
         public Task<User> GetCurrentUser()
         {
-            return userRepo.GetByIdAsync(GetCurrentUserId());
+            return userRepo.FindAsync(GetCurrentUserId());
         }
 
         public int GetCurrentUserId()

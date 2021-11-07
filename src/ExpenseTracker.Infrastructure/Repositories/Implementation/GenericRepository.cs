@@ -63,12 +63,7 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
         {
             return _currentSession.Find(id);
         }
-
-        public virtual async Task<T> GetByIdAsync(long id)
-        {
-            return await _currentSession.FindAsync(id);
-        }
-
+        
         public IQueryable<T> GetPredicatedQueryable(Expression<Func<T, bool>>? predicate)
         {
             return predicate == null ? GetQueryable() : GetQueryable().Where(predicate);

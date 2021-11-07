@@ -19,8 +19,6 @@ namespace ExpenseTracker.Common.Repositories.Interface
         IQueryable<T> GetPredicatedQueryable(Expression<Func<T, bool>>? predicate);
         IQueryable<T> GetQueryable();
         T Find(long id);
-        Task<T?> GetByIdAsync(long id);
-
         Task<bool> CheckIfExistAsync(Expression<Func<T, bool>> predicate);
 
         Pagination<T> Paginate(IQueryable<T> queryable, int page = 1, int limit = 100);

@@ -29,7 +29,7 @@ namespace ExpenseTracker.Core.Services.Implementation
 
             var workspace = await _workspaceRepository.GetByToken(transactionCreateDto.WorkspaceToken).ConfigureAwait(false) ?? throw new WorkspaceNotFoundException();
 
-            var transactionCategory = await _transactionCategoryRepository.GetByIdAsync(transactionCreateDto.TransactionCategoryId).ConfigureAwait(false) ?? throw new TransactionCategoryNotFoundException();
+            var transactionCategory = await _transactionCategoryRepository.FindAsync(transactionCreateDto.TransactionCategoryId).ConfigureAwait(false) ?? throw new TransactionCategoryNotFoundException();
 
             var transaction = Transaction.Create(workspace, transactionCategory, transactionCreateDto.Amount, transactionCreateDto.TransactionDate,
                 transactionCreateDto.Type);
@@ -47,7 +47,7 @@ namespace ExpenseTracker.Core.Services.Implementation
 
             using var Tx = TransactionScopeHelper.GetInstance();
 
-            var transaction = await _transactionRepository.GetByIdAsync(transactionId).ConfigureAwait(false) ?? throw new TransactionNotFoundException();
+            var transaction = await _transactionRepository.FindAsync(transactionId).ConfigureAwait(false) ?? throw new TransactionNotFoundException();
 
             _transactionRepository.Delete(transaction);
             await _uow.CommitAsync();
@@ -61,7 +61,7 @@ namespace ExpenseTracker.Core.Services.Implementation
 
             using var Tx = TransactionScopeHelper.GetInstance();
 
-            var transaction = await _transactionRepository.GetByIdAsync(transactionUpdateDto.Id).ConfigureAwait(false) ?? throw new TransactionNotFoundException();
+            var transaction = await _transactionRepository.FindAsync(transactionUpdateDto.Id).ConfigureAwait(false) ?? throw new TransactionNotFoundException();
             transaction.UpdateAmount(transactionUpdateDto.Amount);
             transaction.UpdateTransactionDate(transactionUpdateDto.TransactionDate);
 

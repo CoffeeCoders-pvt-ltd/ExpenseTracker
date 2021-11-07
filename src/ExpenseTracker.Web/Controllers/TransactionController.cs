@@ -87,7 +87,7 @@ namespace ExpenseTracker.Web.Controllers
         {
             try
             {
-                var transaction = await _transactionRepository.GetByIdAsync(Id)
+                var transaction = await _transactionRepository.FindAsync(Id)
                     .ConfigureAwait(true) ?? throw new TransactionNotFoundException();
 
                 var transactionViewModel = new TransactionViewModel()
@@ -141,7 +141,7 @@ namespace ExpenseTracker.Web.Controllers
         {
             try
             {
-                var transaction = await _transactionRepository.GetByIdAsync(Id)
+                var transaction = await _transactionRepository.FindAsync(Id)
                     .ConfigureAwait(true) ?? throw new TransactionNotFoundException();
 
                 await _transactionService.Delete(transaction.Id)

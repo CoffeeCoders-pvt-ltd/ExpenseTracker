@@ -19,11 +19,13 @@ namespace ExpenseTracker.Core.Services.Implementation
             _transactionCategoryRepository = transactionCategoryRepository;
             _uow = uow;
         }
+
         public async Task Create(TransactionCategoryCreateDto transactionCategoryCreateDto)
         {
             using var tx = TransactionScopeHelper.GetInstance();
 
-            var transaction = TransactionCategory.Create(transactionCategoryCreateDto.Type, transactionCategoryCreateDto.Name, transactionCategoryCreateDto.Color,
+            var transaction = TransactionCategory.Create(transactionCategoryCreateDto.Type,
+                transactionCategoryCreateDto.Name, transactionCategoryCreateDto.Color,
                 transactionCategoryCreateDto.Icon);
             await _transactionCategoryRepository.CreateAsync(transaction).ConfigureAwait(false);
             await _uow.CommitAsync();
@@ -34,7 +36,9 @@ namespace ExpenseTracker.Core.Services.Implementation
         {
             using var tx = TransactionScopeHelper.GetInstance();
 
-            var transaction = await _transactionCategoryRepository.GetByIdAsync(transactionCategoryUpdateDto.TransactionCategoryId).ConfigureAwait(false) ?? throw new TransactionCategoryNotFoundException();
+            var transaction =
+                await _transactionCategoryRepository.FindAsync(transactionCategoryUpdateDto.TransactionCategoryId)
+                    .ConfigureAwait(false) ?? throw new TransactionCategoryNotFoundException();
             transaction.UpdateName(transactionCategoryUpdateDto.Name);
             transaction.UpdateColor(transactionCategoryUpdateDto.Color);
             transaction.UpdateIcon(transactionCategoryUpdateDto.Icon);
@@ -48,7 +52,9 @@ namespace ExpenseTracker.Core.Services.Implementation
         {
             using var tx = TransactionScopeHelper.GetInstance();
 
-            var transaction = await _transactionCategoryRepository.GetByIdAsync(transactionCategoryId).ConfigureAwait(false) ?? throw new TransactionCategoryNotFoundException();
+            var transaction =
+                await _transactionCategoryRepository.FindAsync(transactionCategoryId).ConfigureAwait(false) ??
+                throw new TransactionCategoryNotFoundException();
 
             _transactionCategoryRepository.Delete(transaction);
             await _uow.CommitAsync();
