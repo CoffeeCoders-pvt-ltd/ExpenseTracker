@@ -4,6 +4,7 @@ namespace ExpenseTracker.Common.Model
 {
     public abstract class BaseModel : IBaseModel
     {
+
         public const string StatusActive = "Active";
         public const string StatusInactive = "Inactive";
         public const string StatusDeleted = "Deleted";

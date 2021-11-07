@@ -1,16 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using ExpenseTracker.Core.Repositories.Interface;
-using ExpenseTracker.Infrastructure.Extensions;
 using ExpenseTracker.Web.Provider;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace ExpenseTracker.Infrastructure.Middleware
+namespace ExpenseTracker.Web.Middleware
 {
     public class WorkspaceMiddleware
     {

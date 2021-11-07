@@ -44,7 +44,7 @@ namespace ExpenseTracker.Core.Services.Implementation
                 workspace.SetAsDefaultWorkspace();
             }
 
-            await _workspaceRepository.InsertAsync(workspace).ConfigureAwait(false);
+            await _workspaceRepository.CreateAsync(workspace).ConfigureAwait(false);
             await _uow.CommitAsync();
             tx.Complete();
         }
