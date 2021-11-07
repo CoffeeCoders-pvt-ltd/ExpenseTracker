@@ -74,7 +74,7 @@ namespace ExpenseTracker.Web.Controllers
         {
             try
             {
-                var transactionCategory = await _transactionCategoryRepository.GetByIdAsync(transactionCategoryId)
+                var transactionCategory = await _transactionCategoryRepository.FindAsync(transactionCategoryId)
                     .ConfigureAwait(true) ?? throw new TransactionCategoryNotFoundException();
 
                 var transactionViewModel = new TransactionCategoryViewModel()
@@ -127,7 +127,7 @@ namespace ExpenseTracker.Web.Controllers
         {
             try
             {
-                var transactionCategory = await _transactionCategoryRepository.GetByIdAsync(transactionCategoryId)
+                var transactionCategory = await _transactionCategoryRepository.FindAsync(transactionCategoryId)
                     .ConfigureAwait(true) ?? throw new TransactionCategoryNotFoundException();
 
                 await _transactionCategoryService.Delete(transactionCategory.Id)

@@ -21,7 +21,8 @@ namespace ExpenseTracker.UnitTests.Service
 
         public TransactionCategoryServiceTest()
         {
-            _transactionCategoryService = new TransactionCategoryService(_transactionCategoryRepository.Object, Mock.Of<IUow>());
+            _transactionCategoryService =
+                new TransactionCategoryService(_transactionCategoryRepository.Object, Mock.Of<IUow>());
         }
 
         [Fact]
@@ -57,7 +58,7 @@ namespace ExpenseTracker.UnitTests.Service
             };
 
             _transactionCategoryRepository
-                .Setup(a => a.GetByIdAsync(transactionCategoryUpdateDto.TransactionCategoryId))
+                .Setup(a => a.FindAsync(transactionCategoryUpdateDto.TransactionCategoryId))
                 .ReturnsAsync((TransactionCategory)null);
 
             Func<Task> updatingTransactionCategory = async () =>
@@ -82,7 +83,7 @@ namespace ExpenseTracker.UnitTests.Service
             };
 
             _transactionCategoryRepository
-                .Setup(a => a.GetByIdAsync(transactionCategoryUpdateDto.TransactionCategoryId))
+                .Setup(a => a.FindAsync(transactionCategoryUpdateDto.TransactionCategoryId))
                 .ReturnsAsync(transactionCategory);
 
             await _transactionCategoryService.Update(transactionCategoryUpdateDto);
@@ -99,7 +100,7 @@ namespace ExpenseTracker.UnitTests.Service
         {
             var transactionCategoryId = 1;
 
-            _transactionCategoryRepository.Setup(a => a.GetByIdAsync(transactionCategoryId))
+            _transactionCategoryRepository.Setup(a => a.FindAsync(transactionCategoryId))
                 .ReturnsAsync((TransactionCategory)null);
 
             Func<Task> updatingTransactionCategory = async () =>
@@ -119,7 +120,7 @@ namespace ExpenseTracker.UnitTests.Service
             typeof(TransactionCategory).GetProperty(nameof(TransactionCategory.Id))
                 ?.SetValue(transactionCategory, transactionCategoryId);
 
-            _transactionCategoryRepository.Setup(a => a.GetByIdAsync(transactionCategoryId))
+            _transactionCategoryRepository.Setup(a => a.FindAsync(transactionCategoryId))
                 .ReturnsAsync(transactionCategory);
 
             await _transactionCategoryService.Delete(transactionCategoryId);
