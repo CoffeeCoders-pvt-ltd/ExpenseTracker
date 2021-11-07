@@ -47,18 +47,12 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
             _currentSession.Update(entities);
         }
 
-        public IList<T> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-
         public Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null)
         {
             predicate ??= x => true;
             return _context.Set<T>().Where(predicate).ToListAsync();
         }
-        
+
 
         public IQueryable<T> GetQueryable()
         {

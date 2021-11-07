@@ -15,7 +15,6 @@ namespace ExpenseTracker.Common.Repositories.Interface
         void Create(T entities);
         Task CreateAsync(T entities);
         void Update(T entities);
-        IList<T> GetAll();
         Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null);
         IQueryable<T> GetPredicatedQueryable(Expression<Func<T, bool>>? predicate);
         IQueryable<T> GetQueryable();
