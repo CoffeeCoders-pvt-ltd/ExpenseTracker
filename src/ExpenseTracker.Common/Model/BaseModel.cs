@@ -3,19 +3,19 @@ using ExpenseTracker.Common.Constants;
 
 namespace ExpenseTracker.Common.Model
 {
-    public abstract class BaseModel : IBaseModel
+    public abstract class BaseModel
     {
-        public long Id { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
-        public string Status { get; set; } = StatusConstants.StatusActive;
+        public long Id { get; protected set; }
+        public DateTime CreatedDate { get; protected set; } = DateTime.Now;
+        public string Status { get; protected set; } = StatusConstants.StatusActive;
 
-        public virtual IBaseModel Activate()
+        public virtual BaseModel Activate()
         {
             Status = StatusConstants.StatusActive;
             return this;
         }
 
-        public virtual IBaseModel Deactivate()
+        public virtual BaseModel Deactivate()
         {
             Status = StatusConstants.StatusInactive;
             return this;

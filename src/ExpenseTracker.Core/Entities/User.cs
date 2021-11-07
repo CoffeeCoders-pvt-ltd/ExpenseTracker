@@ -33,9 +33,8 @@ namespace ExpenseTracker.Core.Entities
 
         public virtual bool HasWorkspace => Workspaces.Any();
 
-        public virtual bool HasDefaultWorkspace =>
-            Workspaces.Count(a =>
-                a.WorkspaceType == Workspace.TypeDefaultWorkspace && a.Status == StatusConstants.StatusActive) == 1;
+        public virtual bool HasDefaultWorkspace 
+            => Workspaces.Any(a => a.WorkspaceType == Workspace.TypeDefaultWorkspace && a.Status == StatusConstants.StatusActive);
 
         public virtual Workspace DefaultWorkspace =>
             (HasDefaultWorkspace
