@@ -7,7 +7,7 @@ namespace ExpenseTracker.Web.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "workspace",
                 type: "text",
@@ -15,7 +15,7 @@ namespace ExpenseTracker.Web.Migrations
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "user",
                 type: "text",
@@ -23,7 +23,7 @@ namespace ExpenseTracker.Web.Migrations
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "transaction_category",
                 type: "text",
@@ -31,7 +31,7 @@ namespace ExpenseTracker.Web.Migrations
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "transaction",
                 type: "text",
@@ -42,22 +42,22 @@ namespace ExpenseTracker.Web.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "workspace");
 
             migrationBuilder.DropColumn(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "user");
 
             migrationBuilder.DropColumn(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "transaction_category");
 
             migrationBuilder.DropColumn(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "transaction");
         }

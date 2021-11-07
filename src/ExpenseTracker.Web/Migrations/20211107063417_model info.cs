@@ -16,7 +16,7 @@ namespace ExpenseTracker.Web.Migrations
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
             migrationBuilder.AddColumn<string>(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "workspace",
                 type: "text",
@@ -32,7 +32,7 @@ namespace ExpenseTracker.Web.Migrations
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
             migrationBuilder.AddColumn<string>(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "user",
                 type: "text",
@@ -48,7 +48,7 @@ namespace ExpenseTracker.Web.Migrations
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
             migrationBuilder.AddColumn<string>(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "transaction_category",
                 type: "text",
@@ -64,7 +64,7 @@ namespace ExpenseTracker.Web.Migrations
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
             migrationBuilder.AddColumn<string>(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "transaction",
                 type: "text",
@@ -80,7 +80,7 @@ namespace ExpenseTracker.Web.Migrations
                 table: "workspace");
 
             migrationBuilder.DropColumn(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "workspace");
 
@@ -90,7 +90,7 @@ namespace ExpenseTracker.Web.Migrations
                 table: "user");
 
             migrationBuilder.DropColumn(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "user");
 
@@ -100,7 +100,7 @@ namespace ExpenseTracker.Web.Migrations
                 table: "transaction_category");
 
             migrationBuilder.DropColumn(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "transaction_category");
 
@@ -110,7 +110,7 @@ namespace ExpenseTracker.Web.Migrations
                 table: "transaction");
 
             migrationBuilder.DropColumn(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "transaction");
         }

@@ -33,7 +33,7 @@ namespace ExpenseTracker.Web.Middleware
 
             var currentUser = await userProvider.GetCurrentUser();
 
-            if (currentUser != null && currentUser.Workspaces.All(w => w.Status != Constant.StatusActive) &&
+            if (currentUser != null && currentUser.Workspaces.All(w => w.Status != StatusConstants.StatusActive) &&
                 !currentUser.Workspaces.Any(a => a.IsDefault) && !PathsToAvoid.Contains(currentRequestPath))
             {
                 httpContext.Response.Redirect(WorkspaceCreateUrl);

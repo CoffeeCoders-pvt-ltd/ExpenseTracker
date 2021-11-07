@@ -1,6 +1,6 @@
 ﻿namespace ExpenseTracker.Common.Constants
 {
-    public class Constant
+    public static class StatusConstants
     {
         public const string StatusActive = "Active";
         public const string StatusInactive = "Inactive";

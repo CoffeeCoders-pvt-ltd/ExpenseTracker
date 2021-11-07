@@ -34,7 +34,7 @@
             <div class="dropdown-menu-columns">
                 <div class="dropdown-menu-column">
 
-                    @foreach (var workspace in workspaces.FindAll(x => x.Status == Constant.StatusActive))
+                    @foreach (var workspace in workspaces.FindAll(x => x.Status == StatusConstants.StatusActive))
                     {
                         var href = "#";
                         if (!workspace.IsDefault)

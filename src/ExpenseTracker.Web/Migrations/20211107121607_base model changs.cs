@@ -7,25 +7,25 @@ namespace ExpenseTracker.Web.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "workspace",
                 newName: "Status");
 
             migrationBuilder.RenameColumn(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "user",
                 newName: "Status");
 
             migrationBuilder.RenameColumn(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "transaction_category",
                 newName: "Status");
 
             migrationBuilder.RenameColumn(
-                name: "Constant",
+                name: "StatusConstants",
                 schema: "core",
                 table: "transaction",
                 newName: "Status");
@@ -37,25 +37,25 @@ namespace ExpenseTracker.Web.Migrations
                 name: "Status",
                 schema: "core",
                 table: "workspace",
-                newName: "Constant");
+                newName: "StatusConstants");
 
             migrationBuilder.RenameColumn(
                 name: "Status",
                 schema: "core",
                 table: "user",
-                newName: "Constant");
+                newName: "StatusConstants");
 
             migrationBuilder.RenameColumn(
                 name: "Status",
                 schema: "core",
                 table: "transaction_category",
-                newName: "Constant");
+                newName: "StatusConstants");
 
             migrationBuilder.RenameColumn(
                 name: "Status",
                 schema: "core",
                 table: "transaction",
-                newName: "Constant");
+                newName: "StatusConstants");
         }
     }
 }
