@@ -11,12 +11,16 @@ namespace ExpenseTracker.Web.Middleware
     {
         private const string WorkspaceCreateUrl = "/Workspace/Create";
         private const string LoginUrl = "/Account/Login";
+        private const string LoginApiUrl = "/Authentication/Login";
+        private const string RegisterUrl = "/Account/Register";
 
 
         private static readonly List<string> PathsToAvoid = new()
         {
             LoginUrl,
-            WorkspaceCreateUrl
+            LoginApiUrl,
+            WorkspaceCreateUrl,
+            RegisterUrl
         };
 
         private readonly RequestDelegate _next;
