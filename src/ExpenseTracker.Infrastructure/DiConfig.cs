@@ -1,12 +1,14 @@
+using ExpenseTracker.Core.FileManager.Interface;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
+using ExpenseTracker.Infrastructure.Manager.Implementation;
 using ExpenseTracker.Infrastructure.Repositories.Implementation;
 using ExpenseTracker.Infrastructure.Services.Implementation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExpenseTracker.Infrastructure
 {
-    public static class 
+    public static class
         DiConfig
     {
         public static void InjectRepositories(this IServiceCollection services)
@@ -16,10 +18,12 @@ namespace ExpenseTracker.Infrastructure
             services.AddScoped<IWorkspaceRepository, WorkspaceRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
         }
-        
+
         public static void InjectServices(this IServiceCollection services)
         {
             services.AddScoped<IUserService, UserService>();
         }
+
+        public static void InjectInfrastructureManager(this IServiceCollection services) => services.AddScoped<IFileManager, FileManager>();
     }
 }

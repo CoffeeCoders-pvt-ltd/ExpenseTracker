@@ -10,18 +10,21 @@ namespace ExpenseTracker.Web.ViewModels.Transaction
 {
     public class TransactionViewModel
     {
+        [Required]
+        [DisplayName("Amount")]
         public decimal TransactionAmount { get; set; }
+        
+        [DisplayName("Transaction Date")]
         public DateTime TransactionEntryDate { get; set; }
 
         [Display(Name = "Transaction Category")]
         public int TransactionCategoryId { get; set; }
 
+        [DisplayName("Transaction Type")]
         public string Type { get; set; }
-        public virtual int Id { get; set; }
+        public long Id { get; set; }
 
-        public decimal Amount { get; set; }
-
-
+        
         [DisplayName("Transaction Proof")] 
         public IFormFile? File { get; set; }
 
@@ -33,6 +36,7 @@ namespace ExpenseTracker.Web.ViewModels.Transaction
         public SelectList TransactionCategoriesSelectList =>
             new SelectList(TransactionCategories, "Id", "CategoryName", TransactionCategoryId);
 
+        [DisplayName("Description")]
         public string? Description { get; set; }
     }
 }

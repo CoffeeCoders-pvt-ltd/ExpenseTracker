@@ -213,4 +213,9 @@
       <_ContentIncludedByDefault Remove="wwwroot\lib\fontawesome\fontawesome.js" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\Content" />
+      <Folder Include="wwwroot\Transaction" />
+    </ItemGroup>
+
 </Project>
