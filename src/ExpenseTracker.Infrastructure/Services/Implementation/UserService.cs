@@ -44,7 +44,7 @@ namespace ExpenseTracker.Infrastructure.Services.Implementation
                 throw new Exception("Invalid password");
             }
 
-            var token = GenerateJwtToken(user);
+            var token = GenerateJwtToken(user.Id);
 
             return new AuthenticateResponseDto(user, token)
             {
@@ -56,17 +56,19 @@ namespace ExpenseTracker.Infrastructure.Services.Implementation
         public async Task CreateUser(UserDto dto)
         {
             using var tsc = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            var existingUser = await _userRepository.UserExists(dto.UserName);
+            if (existingUser) throw new Exception("Duplicate user name.");
             var user = new User(dto.FirstName, dto.LastName, dto.UserName, _crypter.Hash(dto.Password));
             await _userRepository.CreateAsync(user);
             await _uow.CommitAsync();
             tsc.Complete();
         }
 
-        private string GenerateJwtToken(User user)
+        private string GenerateJwtToken(long userId)
         {
             var claims = new Claim[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
                 new Claim(JwtRegisteredClaimNames.Exp,
                     new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
