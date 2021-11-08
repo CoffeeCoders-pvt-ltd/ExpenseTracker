@@ -15,9 +15,9 @@ namespace ExpenseTracker.Core.Entities
 
         public string WorkSpaceName { get; protected set; }
         public string Color { get; protected set; }
-        public string? Description { get; set; }
+        public string? Description { get; protected set; }
 
-        public User User { get; protected set; }
+        public virtual User User { get; protected set; }
         public long UserId { get; protected set; }
 
         public string WorkspaceType { get; protected set; }

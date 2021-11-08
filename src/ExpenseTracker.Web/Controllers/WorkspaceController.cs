@@ -104,15 +104,15 @@ namespace ExpenseTracker.Web.Controllers
             try
             {
                 if (!ModelState.IsValid) return View(workspaceEditViewModel);
-                var editableWorkspace = await _workspaceRepository.FindOrThrowAsync(id);
+                var workspace = await _workspaceRepository.FindOrThrowAsync(id);
                 var updateDto = new WorkspaceUpdateDto()
                 {
                     Color = workspaceEditViewModel.Color,
                     Name = workspaceEditViewModel.Name,
                     Description = workspaceEditViewModel.Description
                 };
-                await _workspaceService.Update(updateDto, editableWorkspace);
-                this.AddSuccessMessage("Workspace has been updated");
+                await _workspaceService.Update(workspace,updateDto);
+                this.AddSuccessMessage("Workspace updated");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception e)

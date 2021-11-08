@@ -49,7 +49,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             tx.Complete();
         }
 
-        public async Task Update(WorkspaceUpdateDto workspaceUpdateDto, Workspace workspace)
+        public async Task Update(Workspace workspace, WorkspaceUpdateDto workspaceUpdateDto)
         {
             using var tx = TransactionScopeHelper.GetInstance();
             workspace.Update(workspaceUpdateDto.Name, workspaceUpdateDto.Color, workspaceUpdateDto.Description);
@@ -58,13 +58,11 @@ namespace ExpenseTracker.Core.Services.Implementation
             tx.Complete();
         }
 
-        public async Task Delete(int workspaceId)
+        public async Task Delete(long workspaceId)
         {
             using var tx = TransactionScopeHelper.GetInstance();
-
             var workspace = await _workspaceRepository.FindAsync(workspaceId).ConfigureAwait(false) ??
                             throw new WorkspaceNotFoundException();
-
             _workspaceRepository.Delete(workspace);
             await _uow.CommitAsync();
 
