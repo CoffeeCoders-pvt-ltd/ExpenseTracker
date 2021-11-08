@@ -45,30 +45,29 @@ namespace ExpenseTracker.Core.Entities
             Description = description;
         }
 
-        public virtual void ChangeName(string name)
+        public void ChangeName(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new Exception("Invalid Workspace name.");
             WorkSpaceName = char.ToUpper(name[0]) + name.Substring(1);
         }
 
 
-        public virtual void ChangeColor(string color)
+        public void ChangeColor(string color)
         {
             if (string.IsNullOrWhiteSpace(color)) throw new Exception("Invalid Workspace color.");
             // todo more validation for color
             Color = color;
         }
 
-        public virtual void SetAsDefaultWorkspace() => WorkspaceType = TypeDefaultWorkspace;
+        public  void SetAsDefaultWorkspace() => WorkspaceType = TypeDefaultWorkspace;
 
-        public virtual bool IsDefault => WorkspaceType == TypeDefaultWorkspace;
+        public  bool IsDefault => WorkspaceType == TypeDefaultWorkspace;
 
-        public virtual void SetAsNormalWorkspace() => WorkspaceType = TypeNormalWorkspace;
+        public  void SetAsNormalWorkspace() => WorkspaceType = TypeNormalWorkspace;
 
-        public virtual void AssignUser(User user)
+        private void AssignUser(User user)
         {
             User = user;
-            UserId = user.Id;
             User.AddWorkspace(this);
         }
     }
