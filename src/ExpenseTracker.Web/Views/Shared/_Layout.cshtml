@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="~/dist/css/tabler-payments.min.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/dist/css/tabler-vendors.min.css" asp-append-version="true"/>
     <link rel="stylesheet" href="dist/fontawesome/css/all.min.css">
-    
+
     <link rel="stylesheet" href="~/css/app.css" asp-append-version="true"/>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" asp-append-version="true">
@@ -27,10 +27,10 @@
 <div class="wrapper">
 
     <!--Header-->
-    @await Html.PartialAsync("_Header").ConfigureAwait(true)
+    <partial name="_Header"/>
 
     <!--Navigation-->
-    @await Html.PartialAsync("_Navigation").ConfigureAwait(true)
+    <partial name="_Navigation"/>
 
     <div class="page-wrapper">
         <div class="container-xl">
@@ -41,7 +41,7 @@
                 @RenderBody()
             </div>
         </div>
-        @await Html.PartialAsync("_Footer").ConfigureAwait(true)
+        <partial name="_Footer"/>
     </div>
 </div>
 <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
