@@ -57,7 +57,7 @@ namespace ExpenseTracker.Web.Controllers
                     CategoryId = x.Key.CategoryId,
                     Color = x.Key.Color
                 }).OrderByDescending(a => a.Amount).ToList();
-            homeViewModel.AllCategories = await _transactionCategoryRepository.GetAllAsync().ConfigureAwait(true);
+            homeViewModel.AllCategories = await _transactionCategoryRepository.GetAllAsync();
             homeViewModel.DailyExpenseAmount = transactionQueryable.Where(a =>
                     a.TransactionDate.Date == DateTime.Today.Date && a.Type == TransactionType.Expense).ToList()
                 .Sum(a => a.Amount);

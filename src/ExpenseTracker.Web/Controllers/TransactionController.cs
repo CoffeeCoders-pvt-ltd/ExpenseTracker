@@ -51,7 +51,7 @@ namespace ExpenseTracker.Web.Controllers
         {
             var transactionViewModel = new TransactionViewModel
             {
-                TransactionCategories = await _transactionCategoryRepository.GetAllAsync().ConfigureAwait(true)
+                TransactionCategories = await _transactionCategoryRepository.GetAllAsync()
             };
             return View(transactionViewModel);
         }
@@ -87,8 +87,7 @@ namespace ExpenseTracker.Web.Controllers
         {
             try
             {
-                var transaction = await _transactionRepository.FindAsync(Id)
-                    .ConfigureAwait(true) ?? throw new TransactionNotFoundException();
+                var transaction = await _transactionRepository.FindAsync(Id) ?? throw new TransactionNotFoundException();
 
                 var transactionViewModel = new TransactionViewModel()
                 {
@@ -141,11 +140,9 @@ namespace ExpenseTracker.Web.Controllers
         {
             try
             {
-                var transaction = await _transactionRepository.FindAsync(Id)
-                    .ConfigureAwait(true) ?? throw new TransactionNotFoundException();
+                var transaction = await _transactionRepository.FindAsync(Id) ?? throw new TransactionNotFoundException();
 
-                await _transactionService.Delete(transaction.Id)
-                    .ConfigureAwait(true);
+                await _transactionService.Delete(transaction.Id);
 
                 this.AddSuccessMessage("Transaction  Deleted Successfully");
             }

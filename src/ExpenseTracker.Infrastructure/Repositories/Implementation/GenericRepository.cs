@@ -39,7 +39,7 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
 
         public async Task CreateAsync(T entities)
         {
-            await _currentSession.AddAsync(entities).ConfigureAwait(false);
+            await _currentSession.AddAsync(entities);
         }
 
         public void Update(T entities)

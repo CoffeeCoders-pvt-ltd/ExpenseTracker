@@ -27,7 +27,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             var transaction = TransactionCategory.Create(transactionCategoryCreateDto.Type,
                 transactionCategoryCreateDto.Name, transactionCategoryCreateDto.Color,
                 transactionCategoryCreateDto.Icon);
-            await _transactionCategoryRepository.CreateAsync(transaction).ConfigureAwait(false);
+            await _transactionCategoryRepository.CreateAsync(transaction);
             await _uow.CommitAsync();
             tx.Complete();
         }
@@ -37,8 +37,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             using var tx = TransactionScopeHelper.GetInstance();
 
             var transaction =
-                await _transactionCategoryRepository.FindAsync(transactionCategoryUpdateDto.TransactionCategoryId)
-                    .ConfigureAwait(false) ?? throw new TransactionCategoryNotFoundException();
+                await _transactionCategoryRepository.FindAsync(transactionCategoryUpdateDto.TransactionCategoryId) ?? throw new TransactionCategoryNotFoundException();
             transaction.UpdateName(transactionCategoryUpdateDto.Name);
             transaction.UpdateColor(transactionCategoryUpdateDto.Color);
             transaction.UpdateIcon(transactionCategoryUpdateDto.Icon);
@@ -53,7 +52,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             using var tx = TransactionScopeHelper.GetInstance();
 
             var transaction =
-                await _transactionCategoryRepository.FindAsync(transactionCategoryId).ConfigureAwait(false) ??
+                await _transactionCategoryRepository.FindAsync(transactionCategoryId) ??
                 throw new TransactionCategoryNotFoundException();
 
             _transactionCategoryRepository.Delete(transaction);
