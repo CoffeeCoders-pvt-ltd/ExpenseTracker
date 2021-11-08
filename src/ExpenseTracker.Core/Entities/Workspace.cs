@@ -10,6 +10,18 @@ namespace ExpenseTracker.Core.Entities
         public const string TypeDefaultWorkspace = "DEFAULT_WORKSPACE";
         public const string TypeNormalWorkspace = "NORMAL_WORKSPACE";
 
+
+        public string Token { get; protected set; } = Guid.NewGuid().ToString();
+
+        public string WorkSpaceName { get; protected set; }
+        public string Color { get; protected set; }
+        public string? Description { get; set; }
+
+        public User User { get; protected set; }
+        public long UserId { get; protected set; }
+
+        public string WorkspaceType { get; protected set; }
+
         protected Workspace()
         {
         }
@@ -33,17 +45,12 @@ namespace ExpenseTracker.Core.Entities
             Description = description;
         }
 
-        public virtual string Token { get; protected set; } = Guid.NewGuid().ToString();
-
-        public virtual string WorkSpaceName { get; protected set; }
-
         public virtual void ChangeName(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new Exception("Invalid Workspace name.");
-            WorkSpaceName = char.ToUpper(name[0]) + name.Substring(1);
+            WorkSpaceName = char.ToUpper(name[0]) + name[1..];
         }
 
-        public virtual string Color { get; protected set; }
 
         public virtual void ChangeColor(string color)
         {
@@ -51,13 +58,6 @@ namespace ExpenseTracker.Core.Entities
             // todo more validation for color
             Color = color;
         }
-
-        public virtual string? Description { get; set; }
-
-        public virtual User User { get; protected set; }
-        public virtual long UserId { get; protected set; }
-
-        public virtual string WorkspaceType { get; protected set; }
 
         public virtual void SetAsDefaultWorkspace() => WorkspaceType = TypeDefaultWorkspace;
 
