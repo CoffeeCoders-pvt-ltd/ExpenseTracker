@@ -77,6 +77,51 @@ namespace ExpenseTracker.Web.Controllers
             return RedirectToAction(nameof(Index), "Home");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(long id)
+        {
+            try
+            {
+                var workspace = await _workspaceRepository.FindOrThrowAsync(id);
+                var workspaceEditVm = new WorkspaceEditViewModel()
+                {
+                    Color = workspace.Color,
+                    Name = workspace.WorkSpaceName,
+                    Description = workspace.Description
+                };
+                return View(workspaceEditVm);
+            }
+            catch (Exception e)
+            {
+                this.AddErrorMessage(e.Message);
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(long id, WorkspaceEditViewModel workspaceEditViewModel)
+        {
+            try
+            {
+                if (!ModelState.IsValid) return View(workspaceEditViewModel);
+                var workspace = await _workspaceRepository.FindOrThrowAsync(id);
+                var updateDto = new WorkspaceUpdateDto()
+                {
+                    Color = workspaceEditViewModel.Color,
+                    Name = workspaceEditViewModel.Name,
+                    Description = workspaceEditViewModel.Description
+                };
+                await _workspaceService.Update(workspace,updateDto);
+                this.AddSuccessMessage("Workspace updated");
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                this.AddErrorMessage(e.Message);
+                return RedirectToAction("Index");
+            }
+        }
+
         public async Task<IActionResult> ChangeDefault(string workspaceToken, string redirectUrl = "/")
         {
             try

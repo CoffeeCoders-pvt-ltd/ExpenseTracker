@@ -1,0 +1,57 @@
+﻿@model ExpenseTracker.Web.ViewModels.Workspace.WorkspaceEditViewModel
+
+@{
+    ViewBag.Title = "Edit workspace";
+}
+<form asp-action="Edit" asp-controller="Workspace" method="post">
+    <div class="card">
+        <div class="card-header">
+            <h6 class="card-title">Edit Workspace info</h6>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label class="form-label" asp-for="Name"></label>
+                <div class="input-group input-group-flat">
+                    <span class="input-group-text">
+                        @@
+                    </span>
+                    <input asp-for="Name" class="form-control ps-1" autocomplete="off">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="Description"> Description (Optional)</label>
+                <div class="input-group input-group-flat">
+                    <textarea asp-for="Description" class="form-control ps-1" autocomplete="off"></textarea>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label col-3 col-form-label" asp-for="Color"></label>
+                <div class="row g-2">
+                    @foreach (var (key, value) in Model.ColorList)
+                    {
+                        <div class="col-auto">
+                            <label class="form-colorinput" title="@key">
+                                <input asp-for="Color" type="radio" value="@value" class="form-colorinput-input" data-com.bitwarden.browser.user-edited="yes">
+                                <span class="form-colorinput-color bg-@key.ToLowerInvariant()"></span>
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="row align-items-center mt-3">
+                <div class="col">
+                    <div class="btn-list justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>

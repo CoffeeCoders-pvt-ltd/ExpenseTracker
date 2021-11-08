@@ -4,18 +4,33 @@ using ExpenseTracker.Common.Model;
 
 namespace ExpenseTracker.Core.Entities
 {
-    [Table("workspace", Schema ="core")]
+    [Table("workspace", Schema = "core")]
     public class Workspace : BaseModel
     {
         public const string TypeDefaultWorkspace = "DEFAULT_WORKSPACE";
         public const string TypeNormalWorkspace = "NORMAL_WORKSPACE";
 
-        protected Workspace() { }
+
+        public string Token { get; protected set; } = Guid.NewGuid().ToString();
+
+        public string WorkSpaceName { get; protected set; }
+        public string Color { get; protected set; }
+        public string? Description { get; protected set; }
+
+        public virtual User User { get; protected set; }
+        public long UserId { get; protected set; }
+
+        public string WorkspaceType { get; protected set; }
+
+        protected Workspace()
+        {
+        }
 
         public static Workspace Create(User user, string workspaceName, string color)
         {
             return new Workspace(user, workspaceName, color);
         }
+
         private Workspace(User user, string workSpaceName, string color)
         {
             ChangeName(workSpaceName);
@@ -23,46 +38,37 @@ namespace ExpenseTracker.Core.Entities
             AssignUser(user);
         }
 
+        public void Update(string workspaceName, string color, string? description)
+        {
+            WorkSpaceName = workspaceName;
+            Color = color;
+            Description = description;
+        }
 
-        public virtual string Token { get; protected set; } = Guid.NewGuid().ToString();
-
-        public virtual string WorkSpaceName { get; protected set; }
-
-        public virtual void ChangeName(string name)
+        public void ChangeName(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new Exception("Invalid Workspace name.");
             WorkSpaceName = char.ToUpper(name[0]) + name.Substring(1);
         }
 
-        public virtual string Color { get; protected set; }
 
-        public virtual void ChangeColor(string color)
+        public void ChangeColor(string color)
         {
             if (string.IsNullOrWhiteSpace(color)) throw new Exception("Invalid Workspace color.");
             // todo more validation for color
             Color = color;
         }
-        public virtual string? Description { get; set; }
 
-        public virtual User User { get; protected set; }
-        public virtual long UserId { get; protected set; }
+        public  void SetAsDefaultWorkspace() => WorkspaceType = TypeDefaultWorkspace;
 
-        public virtual string WorkspaceType { get; protected set; }
+        public  bool IsDefault => WorkspaceType == TypeDefaultWorkspace;
 
-        public virtual void SetAsDefaultWorkspace() => WorkspaceType = TypeDefaultWorkspace;
+        public  void SetAsNormalWorkspace() => WorkspaceType = TypeNormalWorkspace;
 
-        public virtual bool IsDefault => WorkspaceType == TypeDefaultWorkspace;
-
-        public virtual void SetAsNormalWorkspace() => WorkspaceType = TypeNormalWorkspace;
-
-        public virtual void AssignUser(User user)
+        private void AssignUser(User user)
         {
             User = user;
-            UserId = user.Id;
             User.AddWorkspace(this);
         }
-
-
-
     }
 }
