@@ -11,7 +11,7 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
         {
         }
 
-        public async Task<bool> ExistingUserName(string username)
+        public async Task<bool> UserExists(string username)
             => await CheckIfExistAsync(u => u.Username.ToLower().Trim() == username.ToLower().Trim());
     }
 }

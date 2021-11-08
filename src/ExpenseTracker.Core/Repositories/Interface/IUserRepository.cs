@@ -6,6 +6,6 @@ namespace ExpenseTracker.Core.Repositories.Interface
 {
     public interface IUserRepository : IGenericRepository<User>
     {
-        Task<bool> ExistingUserName(string username);
+        Task<bool> UserExists(string username);
     }
 }

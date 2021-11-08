@@ -56,7 +56,7 @@ namespace ExpenseTracker.Infrastructure.Services.Implementation
         public async Task CreateUser(UserDto dto)
         {
             using var tsc = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-            var existingUser = await _userRepository.ExistingUserName(dto.UserName);
+            var existingUser = await _userRepository.UserExists(dto.UserName);
             if (existingUser) throw new Exception("Duplicate user name.");
             var user = new User(dto.FirstName, dto.LastName, dto.UserName, _crypter.Hash(dto.Password));
             await _userRepository.CreateAsync(user);
