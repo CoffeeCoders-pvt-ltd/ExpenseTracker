@@ -4,18 +4,21 @@ using ExpenseTracker.Common.Model;
 
 namespace ExpenseTracker.Core.Entities
 {
-    [Table("workspace", Schema ="core")]
+    [Table("workspace", Schema = "core")]
     public class Workspace : BaseModel
     {
         public const string TypeDefaultWorkspace = "DEFAULT_WORKSPACE";
         public const string TypeNormalWorkspace = "NORMAL_WORKSPACE";
 
-        protected Workspace() { }
+        protected Workspace()
+        {
+        }
 
         public static Workspace Create(User user, string workspaceName, string color)
         {
             return new Workspace(user, workspaceName, color);
         }
+
         private Workspace(User user, string workSpaceName, string color)
         {
             ChangeName(workSpaceName);
@@ -23,6 +26,12 @@ namespace ExpenseTracker.Core.Entities
             AssignUser(user);
         }
 
+        public void Update(string workspaceName, string color, string? description)
+        {
+            WorkSpaceName = workspaceName;
+            Color = color;
+            Description = description;
+        }
 
         public virtual string Token { get; protected set; } = Guid.NewGuid().ToString();
 
@@ -42,6 +51,7 @@ namespace ExpenseTracker.Core.Entities
             // todo more validation for color
             Color = color;
         }
+
         public virtual string? Description { get; set; }
 
         public virtual User User { get; protected set; }
@@ -61,8 +71,5 @@ namespace ExpenseTracker.Core.Entities
             UserId = user.Id;
             User.AddWorkspace(this);
         }
-
-
-
     }
 }
