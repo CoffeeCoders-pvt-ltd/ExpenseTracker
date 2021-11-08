@@ -1,4 +1,4 @@
-@model ExpenseTracker.Web.ViewModels.TransactionViewModel
+@model ExpenseTracker.Web.ViewModels.Transaction.TransactionViewModel
 
 @{
     ViewBag.Title = "Transaction";
@@ -66,7 +66,8 @@
                     @Html.LabelFor(a => a.Type, new { @class = "form-label col-3 col-form-label" })
                     <div class="col">
                         <select asp-for="Type" asp-items="Model.TransactionTypes" class="form-control"
-                            id="transactionType"></select>
+                            id="transactionType">
+                        </select>
                     </div>
                 </div>
 
@@ -74,7 +75,8 @@
                     @Html.LabelFor(a => a.TransactionCategoryId, new { @class = "form-label col-3 col-form-label" })
                     <div class="col">
                         <select asp-for="TransactionCategoryId" asp-items="Model.TransactionCategoriesSelectList"
-                            class="form-control"></select>
+                            class="form-control">
+                        </select>
                     </div>
                 </div>
 
@@ -89,12 +91,44 @@
                     </div>
                 </div>
                 <div class="form-group mb-3 row">
+                    <label asp-for="File" class="form-label col-3 col-form-label"></label>
+                    <div class="col">
+                        <input type="file" class="form-control" id="transactionFile" asp-for="File">
+                        <span asp-validation-for="File" class="text-danger"></span>
+                    </div>
+                    <div class="col-1">
+                        <a type="button" class="btn btn-primary" id="file-viewer" data-bs-toggle="modal"
+                            data-bs-target="#image-preview-modal">
+                            Preview
+                        </a>
+
+                        <div class="modal fade" id="image-preview-modal" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Transaction Proof</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <img id="image-preview" src="" alt="" />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-3 row">
                     @Html.LabelFor(a => a.Description, new { @class = "form-label col-3 col-form-label" })
                     <div class="col">
                         <textarea asp-for="Description" class="form-control" rows="5"></textarea>
                     </div>
                 </div>
-
                 <div class="form-footer">
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
@@ -102,6 +136,7 @@
         </div>
     </div>
 </div>
+
 @section Styles
 {
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -163,6 +198,49 @@
     fetchAndUpdateCategoriesList();
 
     $('#TransactionCategoryId').select2();
+
+    const transactionProofElem = document.querySelector('#transactionFile');
+    const filePreviewElem = document.querySelector("#file-viewer");
+    const imageLoaderElem = document.querySelector("#image-preview");
+    let flag = false;
+
+    transactionProofElem.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!validaImage(file)) {
+            alert('Please select a valid image file');
+            e.target.value = '';
+            return;
+        }
+        const reader = new FileReader();
+        reader.addEventListener('load', function () {
+            const IsPDF = validatePDF(file);
+            if (IsPDF) {
+                filePreviewElem.setAttribute('href', reader.result);
+                filePreviewElem.setAttribute('target', '_blank');
+                filePreviewElem.removeAttribute('data-bs-target');
+                filePreviewElem.removeAttribute('data-bs-toggle');
+                flag = true;
+            } else if (flag) {
+                filePreviewElem.setAttribute('data-bs-target', '#image-preview-modal');
+                filePreviewElem.setAttribute('data-bs-toggle', 'modal');
+                filePreviewElem.removeAttribute('href', reader.result);
+                filePreviewElem.removeAttribute('target', '_blank');
+                flag = false;
+            }
+            imageLoaderElem.src = reader.result;
+        });
+        reader.readAsDataURL(file);
+    });
+
+    function validatePDF(file) {
+        const fileExtension = file.name.split('.').pop();
+        if (fileExtension === 'pdf') return true;
+    }
+
+    function validaImage(file) {
+        const fileExtension = file.name.split('.').pop();
+        if (fileExtension === 'jpg' || fileExtension === 'png' || fileExtension === 'jpeg' || fileExtension === 'pdf') return true;
+    }
 
 </script>
 }
