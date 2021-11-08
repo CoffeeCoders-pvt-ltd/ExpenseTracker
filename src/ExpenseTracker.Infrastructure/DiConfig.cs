@@ -6,7 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ExpenseTracker.Infrastructure
 {
-    public static class DiConfig
+    public static class 
+        DiConfig
     {
         public static void InjectRepositories(this IServiceCollection services)
         {

@@ -30,7 +30,7 @@ namespace ExpenseTracker.Web.Controllers
         
         public async Task<IActionResult> Index(TransactionCategoryIndexViewModel transactionCategoryIndexViewModel)
         {
-            var transactionCategories = await _transactionCategoryRepository.GetAllAsync().ConfigureAwait(true);
+            var transactionCategories = await _transactionCategoryRepository.GetAllAsync();
             transactionCategoryIndexViewModel.TransactionCategories = transactionCategories;
             return View(transactionCategoryIndexViewModel);
         }
@@ -74,8 +74,7 @@ namespace ExpenseTracker.Web.Controllers
         {
             try
             {
-                var transactionCategory = await _transactionCategoryRepository.FindAsync(transactionCategoryId)
-                    .ConfigureAwait(true) ?? throw new TransactionCategoryNotFoundException();
+                var transactionCategory = await _transactionCategoryRepository.FindAsync(transactionCategoryId) ?? throw new TransactionCategoryNotFoundException();
 
                 var transactionViewModel = new TransactionCategoryViewModel()
                 {
@@ -127,11 +126,9 @@ namespace ExpenseTracker.Web.Controllers
         {
             try
             {
-                var transactionCategory = await _transactionCategoryRepository.FindAsync(transactionCategoryId)
-                    .ConfigureAwait(true) ?? throw new TransactionCategoryNotFoundException();
+                var transactionCategory = await _transactionCategoryRepository.FindAsync(transactionCategoryId) ?? throw new TransactionCategoryNotFoundException();
 
-                await _transactionCategoryService.Delete(transactionCategory.Id)
-                    .ConfigureAwait(true);
+                await _transactionCategoryService.Delete(transactionCategory.Id);
                 
                 this.AddSuccessMessage("Transaction Category Deleted Successfully");
             }

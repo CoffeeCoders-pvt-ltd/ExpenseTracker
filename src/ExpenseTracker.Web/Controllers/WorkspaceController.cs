@@ -52,7 +52,7 @@ namespace ExpenseTracker.Web.Controllers
             {
                 if (!ModelState.IsValid) return View(workspaceViewModel);
 
-                var currentUser = await GetCurrentUser().ConfigureAwait(true);
+                var currentUser = await GetCurrentUser();
                 var workspaceDto = new WorkspaceCreateDto()
                 {
                     UserId = currentUser.Id,
@@ -61,7 +61,7 @@ namespace ExpenseTracker.Web.Controllers
                     Description = workspaceViewModel.Description
                 };
 
-                await _workspaceService.Create(workspaceDto).ConfigureAwait(true);
+                await _workspaceService.Create(workspaceDto);
 
                 HttpContext?.Session.SetDefaultWorkspace(currentUser.DefaultWorkspace.Token);
 
@@ -126,7 +126,7 @@ namespace ExpenseTracker.Web.Controllers
         {
             try
             {
-                await _workspaceService.ChangeDefault(workspaceToken).ConfigureAwait(true);
+                await _workspaceService.ChangeDefault(workspaceToken);
                 this.AddSuccessMessage("Workspace Changed Successfully");
             }
             catch (Exception e)

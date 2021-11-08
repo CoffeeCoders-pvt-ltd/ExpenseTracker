@@ -36,7 +36,7 @@ namespace ExpenseTracker.Web.Controllers.Api
             {
                 var response = _userService.Authenticate(authenticateRequestDto);
 
-                await SetClaimsAndSignInUser(response).ConfigureAwait(true);
+                await SetClaimsAndSignInUser(response);
 
                     return this.Ok(new
                     {
@@ -66,7 +66,7 @@ namespace ExpenseTracker.Web.Controllers.Api
             var UserIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var Principal = new ClaimsPrincipal(UserIdentity);
             var Prop = new AuthenticationProperties { IsPersistent = result.RememberMe };
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, Principal, Prop).ConfigureAwait(true);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, Principal, Prop);
         }
     }
 }
