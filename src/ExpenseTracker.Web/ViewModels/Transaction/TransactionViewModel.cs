@@ -26,7 +26,7 @@ namespace ExpenseTracker.Web.ViewModels.Transaction
 
         
         [DisplayName("Transaction Proof")] 
-        public IFormFile? File { get; set; }
+        public IFormFile? TransactionImage { get; set; }
 
         public SelectList TransactionTypes => new SelectList(TransactionType.ValidTypes);
 

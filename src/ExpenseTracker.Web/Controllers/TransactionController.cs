@@ -86,7 +86,7 @@ namespace ExpenseTracker.Web.Controllers
                     Type = transactionViewModel.Type,
                     Description = transactionViewModel.Description
                 };
-                await _transactionManager.RecordTransaction(transactionViewModel.File, dto);
+                await _transactionManager.RecordTransaction(transactionViewModel.TransactionImage, dto);
                 this.AddSuccessMessage("Transaction Created Successfully");
             }
             catch (Exception e)

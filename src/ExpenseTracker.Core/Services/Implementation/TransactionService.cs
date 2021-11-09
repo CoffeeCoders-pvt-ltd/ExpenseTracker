@@ -24,7 +24,7 @@ namespace ExpenseTracker.Core.Services.Implementation
         {
             using var tx = TransactionScopeHelper.GetInstance();
             var transaction = Transaction.Create(dto.Workspace, dto.TransactionCategory, dto.Amount,
-                dto.TransactionDate, dto.Type, dto.TransactionProof, dto.Description);
+                dto.TransactionDate, dto.Type, dto.TransactionImage, dto.Description);
             transaction.Description = dto.Description;
             await _transactionRepository.CreateAsync(transaction);
             await _uow.CommitAsync();
@@ -34,7 +34,7 @@ namespace ExpenseTracker.Core.Services.Implementation
         public async Task Remove(Transaction transaction)
         {
             using var tx = TransactionScopeHelper.GetInstance();
-            _transactionRepository.Flush(transaction);
+            _transactionRepository.Delete(transaction);
             await _uow.CommitAsync();
             tx.Complete();
         }

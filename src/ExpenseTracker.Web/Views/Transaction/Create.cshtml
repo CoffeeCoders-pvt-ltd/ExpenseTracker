@@ -87,10 +87,10 @@
                     </div>
                 </div>
                 <div class="form-group mb-3 row">
-                    <label asp-for="File" class="form-label col-3 col-form-label"></label>
+                    <label asp-for="TransactionImage" class="form-label col-3 col-form-label"></label>
                     <div class="col">
-                        <input type="file" class="form-control" id="transactionFile" asp-for="File">
-                        <span asp-validation-for="File" class="text-danger"></span>
+                        <input type="file" class="form-control" id="transactionFile" asp-for="TransactionImage">
+                        <span asp-validation-for="TransactionImage" class="text-danger"></span>
                     </div>
                     <div class="col-1">
                         <a type="button" class="btn btn-primary" id="file-viewer" data-bs-toggle="modal"
@@ -203,20 +203,20 @@
 
     $('#TransactionCategoryId').select2();
 
-    const transactionProofElem = document.querySelector('#transactionFile');
+    const transactionImageElem = document.querySelector('#transactionTransactionImage');
     const filePreviewElem = document.querySelector("#file-viewer");
     const imageLoaderElem = document.querySelector("#image-preview");
     const clearElem = document.querySelector("#clear-file");
     let flag = false;
 
-    transactionProofElem.addEventListener('change', function (e) {
+    transactionImageElem.addEventListener('change', function (e) {
         const file = e.target.files[0];
         if (!validaImage(file)) {
             alert('Please select a valid image file');
             e.target.value = '';
             return;
         }
-        const reader = new FileReader();
+        const reader = new TransactionImageReader();
         reader.addEventListener('load', function () {
             const IsPDF = validatePDF(file);
             if (IsPDF) {
@@ -248,7 +248,7 @@
     }
 
     clearElem.addEventListener('click',_ =>{
-        transactionProofElem.value = "";
+        transactionImageElem.value = "";
     })
     
 </script>

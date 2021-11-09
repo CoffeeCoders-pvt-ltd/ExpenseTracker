@@ -8,7 +8,7 @@ namespace ExpenseTracker.Core.Dto.Transaction
         public Entities.Workspace Workspace { get; set; }
         public decimal Amount { get;  set; }
         public DateTime TransactionDate { get;  set; }
-        public string? TransactionProof { get; set; }
+        public string? TransactionImage { get; set; }
         public string? Description { get; set; }
         public string Type { get;  set; }
     }

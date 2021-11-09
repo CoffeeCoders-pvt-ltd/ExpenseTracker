@@ -63,7 +63,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             using var tx = TransactionScopeHelper.GetInstance();
             var workspace = await _workspaceRepository.FindAsync(workspaceId) ??
                             throw new WorkspaceNotFoundException();
-            _workspaceRepository.Flush(workspace);
+            _workspaceRepository.Delete(workspace);
             await _uow.CommitAsync();
 
             tx.Complete();

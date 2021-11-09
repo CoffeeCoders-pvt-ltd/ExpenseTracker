@@ -125,7 +125,7 @@ namespace ExpenseTracker.UnitTests.Service
 
             await _transactionCategoryService.Delete(transactionCategoryId);
 
-            _transactionCategoryRepository.Verify(a => a.Flush(It.IsAny<TransactionCategory>()), Times.Once);
+            _transactionCategoryRepository.Verify(a => a.Delete(It.IsAny<TransactionCategory>()), Times.Once);
         }
     }
 }
