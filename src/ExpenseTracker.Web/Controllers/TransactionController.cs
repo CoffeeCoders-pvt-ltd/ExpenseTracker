@@ -149,11 +149,8 @@ namespace ExpenseTracker.Web.Controllers
         {
             try
             {
-                var transaction = await _transactionRepository.FindAsync(id) ??
-                                  throw new TransactionNotFoundException();
-
-                await _transactionService.Delete(transaction.Id);
-
+                var transaction = await _transactionRepository.FindAsync(id) ?? throw new TransactionNotFoundException();
+                await _transactionManager.RemoveTransaction(transaction);
                 this.AddSuccessMessage("Transaction  Deleted Successfully");
             }
             catch (Exception e)

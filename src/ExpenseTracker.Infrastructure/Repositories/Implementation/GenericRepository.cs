@@ -27,7 +27,7 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
             => await FindAsync(id) ?? throw new Exception("Request item not found");
 
 
-        public void Delete(T entities)
+        public void Flush(T entities)
         {
             _currentSession.Remove(entities);
         }

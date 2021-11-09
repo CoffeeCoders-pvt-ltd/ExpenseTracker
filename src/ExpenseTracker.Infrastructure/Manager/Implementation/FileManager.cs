@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using ExpenseTracker.Core.FileManager.Interface;
 using Microsoft.AspNetCore.Hosting;
@@ -17,19 +18,28 @@ namespace ExpenseTracker.Infrastructure.Manager.Implementation
 
         public async Task<string> SaveImage(IFormFile? file, string identity, string contentDirectory)
         {
-            var path = Path.Combine(_env.WebRootPath, contentDirectory);
-            if (Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-            var extension = Path.GetExtension(file?.FileName);
+            EnsureDirectoryIsCreated(contentDirectory);
+            var extension = Path.GetExtension(file.FileName);
             var fileName = identity + extension;
-            var filePath = Path.Combine(path, fileName);
+            var filePath = Path.Combine(_env.WebRootPath, contentDirectory, fileName);
             await using var stream = new FileStream(filePath, FileMode.Create);
-            await file?.CopyToAsync(stream)!;
+            await file.CopyToAsync(stream);
             return fileName;
         }
 
-        public void RemoveImage(string identity, string contentDirectory) => File.Delete(contentDirectory + identity);
+        public void RemoveImage(string identity, string contentDirectory)
+        {
+            var x = (_env.WebRootPath + "\\" + contentDirectory) + "\\" + identity;
+            File.Delete((_env.WebRootPath + "\\" + contentDirectory) + "\\" + identity);
+        }
+
+        private void EnsureDirectoryIsCreated(string contentDirectory)
+        {
+            var dir = _env.WebRootPath + "\\" + contentDirectory;
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+        }
     }
 }

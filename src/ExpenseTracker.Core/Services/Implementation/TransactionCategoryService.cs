@@ -55,7 +55,7 @@ namespace ExpenseTracker.Core.Services.Implementation
                 await _transactionCategoryRepository.FindAsync(transactionCategoryId) ??
                 throw new TransactionCategoryNotFoundException();
 
-            _transactionCategoryRepository.Delete(transaction);
+            _transactionCategoryRepository.Flush(transaction);
             await _uow.CommitAsync();
             tx.Complete();
         }

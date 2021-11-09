@@ -23,24 +23,18 @@ namespace ExpenseTracker.Core.Services.Implementation
         public async Task Create(TransactionCreateDto dto)
         {
             using var tx = TransactionScopeHelper.GetInstance();
-            var transaction = Transaction.Create(dto.Workspace, dto.TransactionCategory, dto.Amount, dto.TransactionDate, dto.Type, dto.TransactionProof,dto.Description);
+            var transaction = Transaction.Create(dto.Workspace, dto.TransactionCategory, dto.Amount,
+                dto.TransactionDate, dto.Type, dto.TransactionProof, dto.Description);
             transaction.Description = dto.Description;
             await _transactionRepository.CreateAsync(transaction);
             await _uow.CommitAsync();
             tx.Complete();
         }
 
-        public async Task Delete(long transactionId)
+        public async Task Remove(Transaction transaction)
         {
-            var transactionExists = await _transactionRepository.CheckIfExistAsync(a => a.Id == transactionId);
-            if (!transactionExists) throw new TransactionNotFoundException(transactionId);
-
             using var tx = TransactionScopeHelper.GetInstance();
-
-            var transaction = await _transactionRepository.FindAsync(transactionId) ??
-                              throw new TransactionNotFoundException();
-
-            _transactionRepository.Delete(transaction);
+            _transactionRepository.Flush(transaction);
             await _uow.CommitAsync();
             tx.Complete();
         }
