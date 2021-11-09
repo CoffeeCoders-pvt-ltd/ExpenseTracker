@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpenseTracker.Web.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211109020734_transactionproof")]
-    partial class transactionproof
+    [Migration("20211109034016_transaction image")]
+    partial class transactionimage
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -51,7 +51,6 @@ namespace ExpenseTracker.Web.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("TransactionFile")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Type")

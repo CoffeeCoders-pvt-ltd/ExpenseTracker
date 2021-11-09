@@ -48,7 +48,7 @@ namespace ExpenseTracker.Web.Migrations
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("TransactionImage")
+                    b.Property<string>("TransactionFile")
                         .HasColumnType("text");
 
                     b.Property<string>("Type")

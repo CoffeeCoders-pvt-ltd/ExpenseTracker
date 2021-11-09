@@ -24,7 +24,7 @@ namespace ExpenseTracker.Core.Services.Implementation
         {
             using var tx = TransactionScopeHelper.GetInstance();
             var transaction = Transaction.Create(dto.Workspace, dto.TransactionCategory, dto.Amount,
-                dto.TransactionDate, dto.Type, dto.TransactionImage, dto.Description);
+                dto.TransactionDate, dto.Type, dto.TransactionFile, dto.Description);
             transaction.Description = dto.Description;
             await _transactionRepository.CreateAsync(transaction);
             await _uow.CommitAsync();

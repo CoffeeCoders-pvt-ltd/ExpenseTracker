@@ -29,7 +29,7 @@ namespace ExpenseTracker.Core.Manager
                 identity = await _fileManager.SaveImage(file, Guid.NewGuid().ToString(), nameof(Transaction));
             }
 
-            dto.TransactionImage = identity;
+            dto.TransactionFile = identity;
             await _transactionService.Create(dto);
             tsc.Complete();
         }
@@ -38,9 +38,9 @@ namespace ExpenseTracker.Core.Manager
         {
             using var tsc = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-            if (!string.IsNullOrEmpty(transaction.TransactionImage))
+            if (!string.IsNullOrEmpty(transaction.TransactionFile))
             {
-                _fileManager.RemoveImage(transaction.TransactionImage, nameof(Transaction));
+                _fileManager.RemoveImage(transaction.TransactionFile, nameof(Transaction));
             }
 
             await _transactionService.Remove(transaction);

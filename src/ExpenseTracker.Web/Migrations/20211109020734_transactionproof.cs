@@ -7,7 +7,7 @@ namespace ExpenseTracker.Web.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "TransactionImage",
+                name: "TransactionFile",
                 schema: "core",
                 table: "transaction",
                 type: "text",
@@ -18,7 +18,7 @@ namespace ExpenseTracker.Web.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "TransactionImage",
+                name: "TransactionFile",
                 schema: "core",
                 table: "transaction");
         }
