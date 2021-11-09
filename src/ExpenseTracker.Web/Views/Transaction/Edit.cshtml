@@ -1,6 +1,6 @@
 ﻿@using ExpenseTracker.Web.ViewModels.Transaction
 @using ExpenseTracker.Core.Entities.Common
-@model ExpenseTracker.Web.ViewModels.TransactionViewModel
+@model TransactionViewModel
 
 @{
     ViewBag.Title = "Transaction ";
@@ -51,9 +51,9 @@
             <form method="post" asp-action="Edit" asp-controller="Transaction">
                 <input type="hidden" asp-for="Id">
                 <div class="form-group mb-3 row">
-                    @Html.LabelFor(a => a.Amount, new { @class = "form-label col-3 col-form-label" })
+                    @Html.LabelFor(a => a.TransactionAmount, new { @class = "form-label col-3 col-form-label" })
                     <div class="col">
-                        @Html.TextBoxFor(a => a.Amount, new { @class = "form-control", placeholder = "Enter Ampunt " })
+                        @Html.TextBoxFor(a => a.TransactionAmount, new { @class = "form-control", placeholder = "Enter Ampunt " })
                     </div>
                 </div>
                

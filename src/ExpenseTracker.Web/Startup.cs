@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Reflection.Metadata;
 using System.Text;
 using ExpenseTracker.Core;
 using ExpenseTracker.Infrastructure;
@@ -16,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -111,7 +114,8 @@ namespace ExpenseTracker.Web
                     options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
                 }).AddRazorRuntimeCompilation()
                 .AddNewtonsoftJson(options =>
-                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore).AddRazorRuntimeCompilation();
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore)
+                .AddRazorRuntimeCompilation();
 
             services.AddHttpContextAccessor();
             services.AddScoped<DbContext, AppDbContext>();
@@ -121,6 +125,8 @@ namespace ExpenseTracker.Web
             services.InjectServices();
             services.InjectRepositories();
             services.InjectCrypterServices();
+            services.InjectCoreManager();
+            services.InjectInfrastructureManager();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -148,7 +154,6 @@ namespace ExpenseTracker.Web
             });
 
             app.UseStaticFiles();
-
             app.UseCookiePolicy();
 
             app.UseRouting();

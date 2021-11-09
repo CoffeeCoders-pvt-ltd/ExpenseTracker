@@ -12,46 +12,31 @@ namespace ExpenseTracker.Core.Services.Implementation
     public class TransactionService : ITransactionService
     {
         private readonly ITransactionRepository _transactionRepository;
-        private readonly ITransactionCategoryRepository _transactionCategoryRepository;
-        private readonly IWorkspaceRepository _workspaceRepository;
         private readonly IUow _uow;
 
-        public TransactionService(ITransactionRepository transactionRepository, ITransactionCategoryRepository transactionCategoryRepository, IWorkspaceRepository workspaceRepository, IUow uow)
+        public TransactionService(ITransactionRepository transactionRepository, IUow uow)
         {
             _transactionRepository = transactionRepository;
-            _transactionCategoryRepository = transactionCategoryRepository;
-            _workspaceRepository = workspaceRepository;
             _uow = uow;
         }
-        public async Task Create(TransactionCreateDto transactionCreateDto)
+
+        public async Task Create(TransactionCreateDto dto)
         {
-            using var Tx = TransactionScopeHelper.GetInstance();
-
-            var workspace = await _workspaceRepository.GetByToken(transactionCreateDto.WorkspaceToken) ?? throw new WorkspaceNotFoundException();
-
-            var transactionCategory = await _transactionCategoryRepository.FindAsync(transactionCreateDto.TransactionCategoryId) ?? throw new TransactionCategoryNotFoundException();
-
-            var transaction = Transaction.Create(workspace, transactionCategory, transactionCreateDto.Amount, transactionCreateDto.TransactionDate,
-                transactionCreateDto.Type);
-            transaction.Description = transactionCreateDto.Description;
-
+            using var tx = TransactionScopeHelper.GetInstance();
+            var transaction = Transaction.Create(dto.Workspace, dto.TransactionCategory, dto.Amount,
+                dto.TransactionDate, dto.Type, dto.TransactionFile, dto.Description);
+            transaction.Description = dto.Description;
             await _transactionRepository.CreateAsync(transaction);
             await _uow.CommitAsync();
-            Tx.Complete();
+            tx.Complete();
         }
 
-        public async Task Delete(long transactionId)
+        public async Task Remove(Transaction transaction)
         {
-            var transactionExists = await _transactionRepository.CheckIfExistAsync(a => a.Id == transactionId);
-            if (!transactionExists) throw new TransactionNotFoundException(transactionId);
-
-            using var Tx = TransactionScopeHelper.GetInstance();
-
-            var transaction = await _transactionRepository.FindAsync(transactionId) ?? throw new TransactionNotFoundException();
-
+            using var tx = TransactionScopeHelper.GetInstance();
             _transactionRepository.Delete(transaction);
             await _uow.CommitAsync();
-            Tx.Complete();
+            tx.Complete();
         }
 
         public async Task Update(TransactionUpdateDto transactionUpdateDto)
@@ -60,15 +45,16 @@ namespace ExpenseTracker.Core.Services.Implementation
                 await _transactionRepository.CheckIfExistAsync(a => a.Id == transactionUpdateDto.Id);
             if (!transactionExists) throw new TransactionNotFoundException(transactionUpdateDto.Id);
 
-            using var Tx = TransactionScopeHelper.GetInstance();
+            using var tx = TransactionScopeHelper.GetInstance();
 
-            var transaction = await _transactionRepository.FindAsync(transactionUpdateDto.Id) ?? throw new TransactionNotFoundException();
+            var transaction = await _transactionRepository.FindAsync(transactionUpdateDto.Id) ??
+                              throw new TransactionNotFoundException();
             transaction.UpdateAmount(transactionUpdateDto.Amount);
             transaction.UpdateTransactionDate(transactionUpdateDto.TransactionDate);
 
             _transactionRepository.Update(transaction);
             await _uow.CommitAsync();
-            Tx.Complete();
+            tx.Complete();
         }
     }
 }

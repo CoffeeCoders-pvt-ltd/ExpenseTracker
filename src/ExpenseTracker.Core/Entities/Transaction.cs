@@ -6,12 +6,31 @@ using ExpenseTracker.Core.Exceptions;
 
 namespace ExpenseTracker.Core.Entities
 {
-    [Table("transaction", Schema ="core")]
+    [Table("transaction", Schema = "core")]
     public class Transaction : BaseModel
     {
-        protected Transaction() { }
+        public decimal Amount { get; protected set; }
 
-        public Transaction(Workspace workspace,TransactionCategory transactionCategory,decimal amount,DateTime transactionDate,string type)
+        public string? TransactionFile { get; protected set; }
+        public DateTime TransactionDate { get; protected set; }
+
+        public DateTime EntryDate { get; protected set; }
+        public string? Description { get; set; }
+
+        public string Type { get; protected set; }
+        
+        public long TransactionCategoryId { get; protected set; }
+        public virtual TransactionCategory TransactionCategory { get; protected set; }
+        public virtual Workspace Workspace { get; protected set; }
+        public long WorkspaceId { get; protected set; }
+        
+
+        protected Transaction()
+        {
+        }
+
+        public Transaction(Workspace workspace, TransactionCategory transactionCategory, decimal amount,
+            DateTime transactionDate, string type, string transactionFile, string description)
         {
             SetWorkspace(workspace);
             SetTransactionCategory(transactionCategory);
@@ -21,11 +40,14 @@ namespace ExpenseTracker.Core.Entities
             TransactionDate = transactionDate;
             if (!TransactionType.IsValidType(type)) throw new InvalidTransactionTypeException(type);
             Type = type;
+            TransactionFile = transactionFile;
+            Description = description;
         }
-        
-        public static Transaction Create(Workspace workspace,TransactionCategory transactionCategory,decimal amount,DateTime transactionDate,string type)
+
+        public static Transaction Create(Workspace workspace, TransactionCategory transactionCategory, decimal amount,
+            DateTime transactionDate, string type, string transactionProof, string description)
         {
-            return new(workspace,transactionCategory,amount, transactionDate, type);
+            return new(workspace, transactionCategory, amount, transactionDate, type,transactionProof, description);
         }
 
         public virtual void UpdateAmount(decimal amount)
@@ -34,38 +56,21 @@ namespace ExpenseTracker.Core.Entities
             Amount = amount;
         }
 
-        public virtual void UpdateTransactionDate(DateTime transactionDate)
+        public void UpdateTransactionDate(DateTime transactionDate)
         {
             TransactionDate = transactionDate;
         }
-        
-        public virtual decimal Amount { get; protected set; }
-        
-        public virtual DateTime TransactionDate { get; protected set; }
 
-        public virtual DateTime EntryDate { get; protected set; }
-        public virtual string? Description { get; set; }
-        
-        public virtual string Type { get; protected set; }
-        
-        public virtual long TransactionCategoryId { get; protected set; }
-        public virtual TransactionCategory TransactionCategory { get; protected set; }
 
-        protected virtual void SetTransactionCategory(TransactionCategory transactionCategory)
+        private void SetTransactionCategory(TransactionCategory transactionCategory)
         {
             TransactionCategory = transactionCategory;
-            TransactionCategoryId = transactionCategory.Id;
         }
-        
-        
-        public virtual long WorkspaceId { get; protected set; }
-        public virtual Workspace Workspace { get; protected set; }
 
-        protected virtual void SetWorkspace(Workspace workspace)
+
+        private void SetWorkspace(Workspace workspace)
         {
             Workspace = workspace;
-            WorkspaceId = workspace.Id;
         }
-
     }
 }
