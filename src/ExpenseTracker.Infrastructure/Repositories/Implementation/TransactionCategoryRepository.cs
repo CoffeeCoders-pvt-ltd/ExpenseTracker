@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Infrastructure.Repositories.Implementation
 {
-    public class TransactionCategoryRepository : GenericRepository<TransactionCategory>,ITransactionCategoryRepository
+    public class TransactionCategoryRepository : GenericRepository<TransactionCategory>, ITransactionCategoryRepository
     {
         public TransactionCategoryRepository(DbContext context) : base(context)
         {

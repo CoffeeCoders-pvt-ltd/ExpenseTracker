@@ -27,14 +27,14 @@ namespace ExpenseTracker.Web.Controllers
             _transactionCategoryService = transactionCategoryService;
             _logger = logger;
         }
-        
+
         public async Task<IActionResult> Index(TransactionCategoryIndexViewModel transactionCategoryIndexViewModel)
         {
             var transactionCategories = await _transactionCategoryRepository.GetAllAsync();
             transactionCategoryIndexViewModel.TransactionCategories = transactionCategories;
             return View(transactionCategoryIndexViewModel);
         }
-        
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -51,30 +51,29 @@ namespace ExpenseTracker.Web.Controllers
 
                 await _transactionCategoryService.Create(new TransactionCategoryCreateDto()
                 {
-                    
                     Color = transactionCategoryViewModel.Color,
                     Type = transactionCategoryViewModel.Type,
                     Name = transactionCategoryViewModel.Name,
                     Icon = transactionCategoryViewModel.Icon
                 });
-            
+
                 this.AddSuccessMessage("Transaction Category Create Successfully");
-                
             }
             catch (Exception e)
             {
-                _logger.LogError(e,e.Message);
+                _logger.LogError(e, e.Message);
                 this.AddErrorMessage(e.Message);
             }
-            return RedirectToAction(nameof(Index));
 
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(int transactionCategoryId)
         {
             try
             {
-                var transactionCategory = await _transactionCategoryRepository.FindAsync(transactionCategoryId) ?? throw new TransactionCategoryNotFoundException();
+                var transactionCategory = await _transactionCategoryRepository.FindAsync(transactionCategoryId) ??
+                                          throw new TransactionCategoryNotFoundException();
 
                 var transactionViewModel = new TransactionCategoryViewModel()
                 {
@@ -84,12 +83,12 @@ namespace ExpenseTracker.Web.Controllers
                     Type = transactionCategory.Type,
                     Color = transactionCategory.Color
                 };
-            
+
                 return View(transactionViewModel);
             }
             catch (Exception e)
             {
-                _logger.LogError(e,e.Message);
+                _logger.LogError(e, e.Message);
                 this.AddErrorMessage(e.Message);
                 return RedirectToAction(nameof(Index));
             }
@@ -110,15 +109,15 @@ namespace ExpenseTracker.Web.Controllers
                     Name = transactionCategoryViewModel.Name,
                     Icon = transactionCategoryViewModel.Icon
                 });
-            
+
                 this.AddSuccessMessage("Transaction Category Updated Successfully");
-                
             }
             catch (Exception e)
             {
-                _logger.LogError(e,e.Message);
+                _logger.LogError(e, e.Message);
                 this.AddErrorMessage(e.Message);
             }
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -127,20 +126,15 @@ namespace ExpenseTracker.Web.Controllers
             try
             {
                 var transactionCategory = await _transactionCategoryRepository.FindAsync(transactionCategoryId) ?? throw new TransactionCategoryNotFoundException();
-
-                await _transactionCategoryService.Delete(transactionCategory.Id);
-                
+                await _transactionCategoryService.Delete(transactionCategory);
                 this.AddSuccessMessage("Transaction Category Deleted Successfully");
             }
             catch (Exception e)
             {
-                _logger.LogError(e,e.Message);
+                _logger.LogError(e, e.Message);
                 this.AddErrorMessage(e.Message);
             }
             return RedirectToAction(nameof(Index));
         }
-        
-        
-        
     }
 }

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using ExpenseTracker.Core.Dto.TransactionCategory;
+using ExpenseTracker.Core.Entities;
 
 namespace ExpenseTracker.Core.Services.Interface
 {
@@ -7,6 +8,6 @@ namespace ExpenseTracker.Core.Services.Interface
     {
         Task Create(TransactionCategoryCreateDto transactionCategoryCreateDto);
         Task Update(TransactionCategoryUpdateDto transactionCategoryUpdateDto);
-        Task Delete(long transactionCategoryId);
+        Task Delete(TransactionCategory transactionCategory);
     }
 }

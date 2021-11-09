@@ -13,11 +13,14 @@ namespace ExpenseTracker.Core.Services.Implementation
     {
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
         private readonly IUow _uow;
+        private readonly ITransactionRepository _transactionRepository;
 
-        public TransactionCategoryService(ITransactionCategoryRepository transactionCategoryRepository, IUow uow)
+        public TransactionCategoryService(ITransactionCategoryRepository transactionCategoryRepository, IUow uow,
+            ITransactionRepository transactionRepository)
         {
             _transactionCategoryRepository = transactionCategoryRepository;
             _uow = uow;
+            _transactionRepository = transactionRepository;
         }
 
         public async Task Create(TransactionCategoryCreateDto transactionCategoryCreateDto)
@@ -37,7 +40,8 @@ namespace ExpenseTracker.Core.Services.Implementation
             using var tx = TransactionScopeHelper.GetInstance();
 
             var transaction =
-                await _transactionCategoryRepository.FindAsync(transactionCategoryUpdateDto.TransactionCategoryId) ?? throw new TransactionCategoryNotFoundException();
+                await _transactionCategoryRepository.FindAsync(transactionCategoryUpdateDto.TransactionCategoryId) ??
+                throw new TransactionCategoryNotFoundException();
             transaction.UpdateName(transactionCategoryUpdateDto.Name);
             transaction.UpdateColor(transactionCategoryUpdateDto.Color);
             transaction.UpdateIcon(transactionCategoryUpdateDto.Icon);
@@ -47,15 +51,12 @@ namespace ExpenseTracker.Core.Services.Implementation
             tx.Complete();
         }
 
-        public async Task Delete(long transactionCategoryId)
+        public async Task Delete(TransactionCategory transactionCategory)
         {
             using var tx = TransactionScopeHelper.GetInstance();
-
-            var transaction =
-                await _transactionCategoryRepository.FindAsync(transactionCategoryId) ??
-                throw new TransactionCategoryNotFoundException();
-
-            _transactionCategoryRepository.Delete(transaction);
+            var existTransaction = await _transactionRepository.ExistTransaction(transactionCategory.Id);
+            if (existTransaction) throw new TransactionFoundException();
+            _transactionCategoryRepository.Delete(transactionCategory);
             await _uow.CommitAsync();
             tx.Complete();
         }
