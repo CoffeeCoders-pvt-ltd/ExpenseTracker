@@ -5,6 +5,7 @@ using ExpenseTracker.Common.Helpers;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 using ExpenseTracker.Common.DBAL;
+using ExpenseTracker.Core.Exceptions;
 
 namespace ExpenseTracker.Core.Services.Implementation
 {
@@ -12,11 +13,13 @@ namespace ExpenseTracker.Core.Services.Implementation
     {
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
         private readonly IUow _uow;
+        private readonly ITransactionRepository _transactionRepository;
 
-        public TransactionCategoryService(ITransactionCategoryRepository transactionCategoryRepository, IUow uow)
+        public TransactionCategoryService(ITransactionCategoryRepository transactionCategoryRepository, IUow uow, ITransactionRepository transactionRepository)
         {
             _transactionCategoryRepository = transactionCategoryRepository;
             _uow = uow;
+            _transactionRepository = transactionRepository;
         }
 
         public async Task Create(TransactionCategoryCreateDto dto)
@@ -40,6 +43,8 @@ namespace ExpenseTracker.Core.Services.Implementation
         public async Task Delete(TransactionCategory transactionCategory)
         {
             using var tx = TransactionScopeHelper.GetInstance();
+            var existTransaction = await _transactionRepository.ExistTransaction(transactionCategory.Id);
+            if (existTransaction) throw new TransactionFoundException();
             _transactionCategoryRepository.Delete(transactionCategory);
             await _uow.CommitAsync();
             tx.Complete();

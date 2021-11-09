@@ -34,8 +34,7 @@ namespace ExpenseTracker.Web.Controllers
         public async Task<IActionResult> Index(TransactionCategoryIndexViewModel transactionCategoryIndexViewModel)
         {
             var defaultWorkspaceId = await GetDefaultWorkspaceId();
-            var transactionCategories =
-                await _transactionCategoryRepository.GetCategoriesGetByWorkspace(defaultWorkspaceId);
+            var transactionCategories = await _transactionCategoryRepository.GetCategoriesGetByWorkspace(defaultWorkspaceId);
             transactionCategoryIndexViewModel.TransactionCategories = transactionCategories;
             return View(transactionCategoryIndexViewModel);
         }
@@ -78,8 +77,7 @@ namespace ExpenseTracker.Web.Controllers
         {
             try
             {
-                var transactionCategory = await _transactionCategoryRepository.FindAsync(id) ??
-                                          throw new TransactionCategoryNotFoundException();
+                var transactionCategory = await _transactionCategoryRepository.FindAsync(id) ?? throw new TransactionCategoryNotFoundException();
                 var defaultWorkspaceId = await GetDefaultWorkspaceId();
                 if (transactionCategory.WorkspaceId != defaultWorkspaceId) return RedirectToAction(nameof(Index));
                 var transactionViewModel = new TransactionCategoryViewModel()
@@ -106,8 +104,7 @@ namespace ExpenseTracker.Web.Controllers
             try
             {
                 if (!ModelState.IsValid) return View(transactionCategoryViewModel);
-                var transactionCategory = await _transactionCategoryRepository.FindAsync(id) ??
-                                          throw new TransactionCategoryNotFoundException();
+                var transactionCategory = await _transactionCategoryRepository.FindAsync(id) ?? throw new TransactionCategoryNotFoundException();
                 var defaultWorkspaceId = await GetDefaultWorkspaceId();
                 if (transactionCategory.WorkspaceId != defaultWorkspaceId) return RedirectToAction(nameof(Index));
                 var dto = new TransactionCategoryUpdateDto()
