@@ -20,17 +20,14 @@ namespace ExpenseTracker.Core.Services.Implementation
             _uow = uow;
         }
 
-        public async Task<Transaction> Create(TransactionCreateDto transactionCreateDto)
+        public async Task Create(TransactionCreateDto dto)
         {
             using var tx = TransactionScopeHelper.GetInstance();
-            var transaction = Transaction.Create(transactionCreateDto.Workspace,
-                transactionCreateDto.TransactionCategory, transactionCreateDto.Amount,
-                transactionCreateDto.TransactionDate, transactionCreateDto.Type);
-            transaction.Description = transactionCreateDto.Description;
+            var transaction = Transaction.Create(dto.Workspace, dto.TransactionCategory, dto.Amount, dto.TransactionDate, dto.Type, dto.TransactionProof,dto.Description);
+            transaction.Description = dto.Description;
             await _transactionRepository.CreateAsync(transaction);
             await _uow.CommitAsync();
             tx.Complete();
-            return transaction;
         }
 
         public async Task Delete(long transactionId)

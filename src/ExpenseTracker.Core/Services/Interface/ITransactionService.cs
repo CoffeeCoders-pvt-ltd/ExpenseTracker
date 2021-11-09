@@ -6,7 +6,7 @@ namespace ExpenseTracker.Core.Services.Interface
 {
    public interface ITransactionService
     {
-        Task<Transaction> Create(TransactionCreateDto transactionCreateDto);
+        Task Create(TransactionCreateDto dto);
         Task Update(TransactionUpdateDto transactionUpdateDto);
         Task Delete(long transactionId);
     }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Transactions;
 using ExpenseTracker.Core.Dto.Transaction;
 using ExpenseTracker.Core.FileManager.Interface;
@@ -12,6 +13,7 @@ namespace ExpenseTracker.Core.Manager
     {
         private readonly ITransactionService _transactionService;
         private readonly IFileManager _fileManager;
+        private string identity = "";
 
         public TransactionManager(ITransactionService transactionService, IFileManager fileManager)
         {
@@ -24,14 +26,11 @@ namespace ExpenseTracker.Core.Manager
             using var tsc = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             if (file != null)
             {
-                var transaction = await _transactionService.Create(dto);
-                await _fileManager.SaveImage(file, transaction.Id.ToString(), nameof(transaction));
-            }
-            else if (file == null)
-            {
-                await _transactionService.Create(dto);
+                identity = await _fileManager.SaveImage(file, new Guid().ToString(), nameof(Transaction));
             }
 
+            dto.TransactionProof = identity;
+            await _transactionService.Create(dto);
             tsc.Complete();
         }
     }

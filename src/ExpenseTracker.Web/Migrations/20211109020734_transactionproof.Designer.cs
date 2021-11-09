@@ -3,15 +3,17 @@ using System;
 using ExpenseTracker.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ExpenseTracker.Web.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211109020734_transactionproof")]
+    partial class transactionproof
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,6 +51,7 @@ namespace ExpenseTracker.Web.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("TransactionProof")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Type")

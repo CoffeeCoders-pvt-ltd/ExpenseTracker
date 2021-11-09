@@ -15,19 +15,19 @@ namespace ExpenseTracker.Infrastructure.Manager.Implementation
             _env = env;
         }
 
-        public async Task SaveImage(IFormFile file, string identity, string contentDirectory)
+        public async Task<string> SaveImage(IFormFile? file, string identity, string contentDirectory)
         {
             var path = Path.Combine(_env.WebRootPath, contentDirectory);
             if (Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
-
-            var extension = Path.GetExtension(file.FileName);
+            var extension = Path.GetExtension(file?.FileName);
             var fileName = identity + extension;
             var filePath = Path.Combine(path, fileName);
             await using var stream = new FileStream(filePath, FileMode.Create);
-            await file.CopyToAsync(stream)!;
+            await file?.CopyToAsync(stream)!;
+            return fileName;
         }
 
         public void RemoveImage(string identity, string contentDirectory) => File.Delete(contentDirectory + identity);
