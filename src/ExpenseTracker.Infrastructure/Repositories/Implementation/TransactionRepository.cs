@@ -1,4 +1,4 @@
-﻿using ExpenseTracker.Core.Repositories.Interface;
+using ExpenseTracker.Core.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Infrastructure.Repositories.Implementation
