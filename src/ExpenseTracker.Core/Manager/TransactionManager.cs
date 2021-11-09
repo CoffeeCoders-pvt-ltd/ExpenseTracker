@@ -13,7 +13,6 @@ namespace ExpenseTracker.Core.Manager
     {
         private readonly ITransactionService _transactionService;
         private readonly IFileManager _fileManager;
-        private string identity = "";
 
         public TransactionManager(ITransactionService transactionService, IFileManager fileManager)
         {
@@ -23,6 +22,7 @@ namespace ExpenseTracker.Core.Manager
 
         public async Task RecordTransaction(IFormFile? file, TransactionCreateDto dto)
         {
+            var identity = "";
             using var tsc = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             if (file != null)
             {
