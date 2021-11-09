@@ -7,6 +7,7 @@ namespace ExpenseTracker.Core.Repositories.Interface
 {
     public interface ITransactionCategoryRepository : IGenericRepository<TransactionCategory>
     {
-        Task<IList<TransactionCategory>> GetByType(string type);
+        Task<IList<TransactionCategory>> GetByType(string type, long workspaceId);
+        Task<IList<TransactionCategory>> GetCategoriesGetByWorkspace(long workspaceId);
     }
 }

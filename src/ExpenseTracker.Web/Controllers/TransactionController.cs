@@ -57,9 +57,11 @@ namespace ExpenseTracker.Web.Controllers
 
         public async Task<IActionResult> Create()
         {
+            var defaultWorkspaceId = (await _userProvider.GetCurrentUser()).DefaultWorkspace.Id;
             var transactionViewModel = new TransactionViewModel
             {
-                TransactionCategories = await _transactionCategoryRepository.GetAllAsync()
+                TransactionCategories =
+                    await _transactionCategoryRepository.GetCategoriesGetByWorkspace(defaultWorkspaceId)
             };
             return View(transactionViewModel);
         }
@@ -71,11 +73,11 @@ namespace ExpenseTracker.Web.Controllers
             {
                 if (!ModelState.IsValid) return View(transactionViewModel);
                 var user = await _userProvider.GetCurrentUser();
-                var workspace = await _workspaceRepository.GetByToken(user.DefaultWorkspace.Token)
-                                ?? throw new WorkspaceNotFoundException();
+                var workspace = await _workspaceRepository.GetByToken(user.DefaultWorkspace.Token) ??
+                                throw new WorkspaceNotFoundException();
                 var transactionCategory =
-                    await _transactionCategoryRepository.FindAsync(transactionViewModel.TransactionCategoryId)
-                    ?? throw new TransactionCategoryNotFoundException();
+                    await _transactionCategoryRepository.FindAsync(transactionViewModel.TransactionCategoryId) ??
+                    throw new TransactionCategoryNotFoundException();
 
                 var dto = new TransactionCreateDto()
                 {
@@ -149,7 +151,8 @@ namespace ExpenseTracker.Web.Controllers
         {
             try
             {
-                var transaction = await _transactionRepository.FindAsync(id) ?? throw new TransactionNotFoundException();
+                var transaction = await _transactionRepository.FindAsync(id) ??
+                                  throw new TransactionNotFoundException();
                 await _transactionManager.RemoveTransaction(transaction);
                 this.AddSuccessMessage("Transaction  Deleted Successfully");
             }

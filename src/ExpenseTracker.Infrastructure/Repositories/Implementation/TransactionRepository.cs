@@ -8,5 +8,6 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
         public TransactionRepository(DbContext context) : base(context)
         {
         }
+        
     }
 }

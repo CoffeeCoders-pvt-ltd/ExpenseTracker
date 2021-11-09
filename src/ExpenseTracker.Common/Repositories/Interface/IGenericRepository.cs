@@ -12,6 +12,7 @@ namespace ExpenseTracker.Common.Repositories.Interface
         Task<T> FindAsync(long id);
         Task<T> FindOrThrowAsync(long id);
         void Delete(T entities);
+        Task<T> GetItemAsync(Expression<Func<T, bool>> predicate);
         void Create(T entities);
         Task CreateAsync(T entities);
         void Update(T entities);

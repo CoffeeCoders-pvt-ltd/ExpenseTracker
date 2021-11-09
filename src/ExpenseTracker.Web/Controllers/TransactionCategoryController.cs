@@ -5,6 +5,7 @@ using ExpenseTracker.Core.Exceptions;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
+using ExpenseTracker.Web.Provider;
 using ExpenseTracker.Web.ViewModels.TransactionCategory;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,23 +19,27 @@ namespace ExpenseTracker.Web.Controllers
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
         private readonly ITransactionCategoryService _transactionCategoryService;
         private readonly ILogger<TransactionCategoryController> _logger;
+        private readonly IUserProvider _userProvider;
 
         public TransactionCategoryController(ITransactionCategoryRepository transactionCategoryRepository,
             ITransactionCategoryService transactionCategoryService,
-            ILogger<TransactionCategoryController> logger)
+            ILogger<TransactionCategoryController> logger, IUserProvider userProvider)
         {
             _transactionCategoryRepository = transactionCategoryRepository;
             _transactionCategoryService = transactionCategoryService;
             _logger = logger;
+            _userProvider = userProvider;
         }
-        
+
         public async Task<IActionResult> Index(TransactionCategoryIndexViewModel transactionCategoryIndexViewModel)
         {
-            var transactionCategories = await _transactionCategoryRepository.GetAllAsync();
+            var defaultWorkspaceId = await GetDefaultWorkspaceId();
+            var transactionCategories =
+                await _transactionCategoryRepository.GetCategoriesGetByWorkspace(defaultWorkspaceId);
             transactionCategoryIndexViewModel.TransactionCategories = transactionCategories;
             return View(transactionCategoryIndexViewModel);
         }
-        
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -43,104 +48,106 @@ namespace ExpenseTracker.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(TransactionCategoryViewModel transactionCategoryViewModel)
+        public async Task<IActionResult> Create(TransactionCategoryViewModel transactionCategoryVm)
         {
             try
             {
-                if (!ModelState.IsValid) return View(transactionCategoryViewModel);
-
-                await _transactionCategoryService.Create(new TransactionCategoryCreateDto()
+                if (!ModelState.IsValid) return View(transactionCategoryVm);
+                var currentUser = await _userProvider.GetCurrentUser();
+                var dto = new TransactionCategoryCreateDto()
                 {
-                    
-                    Color = transactionCategoryViewModel.Color,
-                    Type = transactionCategoryViewModel.Type,
-                    Name = transactionCategoryViewModel.Name,
-                    Icon = transactionCategoryViewModel.Icon
-                });
-            
+                    Workspace = currentUser.DefaultWorkspace,
+                    Color = transactionCategoryVm.Color,
+                    Type = transactionCategoryVm.Type,
+                    Name = transactionCategoryVm.Name,
+                    Icon = transactionCategoryVm.Icon
+                };
+                await _transactionCategoryService.Create(dto);
                 this.AddSuccessMessage("Transaction Category Create Successfully");
-                
             }
             catch (Exception e)
             {
-                _logger.LogError(e,e.Message);
+                _logger.LogError(e, e.Message);
                 this.AddErrorMessage(e.Message);
             }
-            return RedirectToAction(nameof(Index));
 
+            return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Edit(int transactionCategoryId)
+        public async Task<IActionResult> Edit(long id)
         {
             try
             {
-                var transactionCategory = await _transactionCategoryRepository.FindAsync(transactionCategoryId) ?? throw new TransactionCategoryNotFoundException();
-
+                var transactionCategory = await _transactionCategoryRepository.FindAsync(id) ??
+                                          throw new TransactionCategoryNotFoundException();
+                var defaultWorkspaceId = await GetDefaultWorkspaceId();
+                if (transactionCategory.WorkspaceId != defaultWorkspaceId) return RedirectToAction(nameof(Index));
                 var transactionViewModel = new TransactionCategoryViewModel()
                 {
-                    TransactionCategoryId = transactionCategory.Id,
                     Name = transactionCategory.CategoryName,
                     Icon = transactionCategory.Icon,
                     Type = transactionCategory.Type,
                     Color = transactionCategory.Color
                 };
-            
+
                 return View(transactionViewModel);
             }
             catch (Exception e)
             {
-                _logger.LogError(e,e.Message);
+                _logger.LogError(e, e.Message);
                 this.AddErrorMessage(e.Message);
                 return RedirectToAction(nameof(Index));
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(TransactionCategoryViewModel transactionCategoryViewModel)
+        public async Task<IActionResult> Edit(long id, TransactionCategoryViewModel transactionCategoryViewModel)
         {
             try
             {
                 if (!ModelState.IsValid) return View(transactionCategoryViewModel);
-
-                await _transactionCategoryService.Update(new TransactionCategoryUpdateDto()
+                var transactionCategory = await _transactionCategoryRepository.FindAsync(id) ??
+                                          throw new TransactionCategoryNotFoundException();
+                var defaultWorkspaceId = await GetDefaultWorkspaceId();
+                if (transactionCategory.WorkspaceId != defaultWorkspaceId) return RedirectToAction(nameof(Index));
+                var dto = new TransactionCategoryUpdateDto()
                 {
-                    TransactionCategoryId = transactionCategoryViewModel.TransactionCategoryId,
-                    Color = transactionCategoryViewModel.Color,
-                    Type = transactionCategoryViewModel.Type,
                     Name = transactionCategoryViewModel.Name,
-                    Icon = transactionCategoryViewModel.Icon
-                });
-            
+                    Color = transactionCategoryViewModel.Color,
+                    Icon = transactionCategory.Icon,
+                    Type = transactionCategory.Type
+                };
+                await _transactionCategoryService.Update(transactionCategory, dto);
                 this.AddSuccessMessage("Transaction Category Updated Successfully");
-                
             }
             catch (Exception e)
             {
-                _logger.LogError(e,e.Message);
+                _logger.LogError(e, e.Message);
                 this.AddErrorMessage(e.Message);
             }
+
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(int transactionCategoryId)
+        public async Task<IActionResult> Delete(long id)
         {
             try
             {
-                var transactionCategory = await _transactionCategoryRepository.FindAsync(transactionCategoryId) ?? throw new TransactionCategoryNotFoundException();
-
-                await _transactionCategoryService.Delete(transactionCategory.Id);
-                
+                var transactionCategory = await _transactionCategoryRepository.FindAsync(id) ?? throw new TransactionCategoryNotFoundException();
+                var defaultWorkspaceId = await GetDefaultWorkspaceId();
+                if (transactionCategory.WorkspaceId != defaultWorkspaceId) return RedirectToAction(nameof(Index));
+                await _transactionCategoryService.Delete(transactionCategory);
                 this.AddSuccessMessage("Transaction Category Deleted Successfully");
             }
             catch (Exception e)
             {
-                _logger.LogError(e,e.Message);
+                _logger.LogError(e, e.Message);
                 this.AddErrorMessage(e.Message);
             }
+
             return RedirectToAction(nameof(Index));
         }
-        
-        
-        
+
+        private async Task<long> GetDefaultWorkspaceId() => (await _userProvider.GetCurrentUser()).DefaultWorkspace.Id;
     }
 }

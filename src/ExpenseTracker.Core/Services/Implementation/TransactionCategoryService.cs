@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using ExpenseTracker.Core.Dto.TransactionCategory;
 using ExpenseTracker.Core.Entities;
-using ExpenseTracker.Core.Exceptions;
 using ExpenseTracker.Common.Helpers;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
@@ -20,42 +19,28 @@ namespace ExpenseTracker.Core.Services.Implementation
             _uow = uow;
         }
 
-        public async Task Create(TransactionCategoryCreateDto transactionCategoryCreateDto)
+        public async Task Create(TransactionCategoryCreateDto dto)
         {
             using var tx = TransactionScopeHelper.GetInstance();
-
-            var transaction = TransactionCategory.Create(transactionCategoryCreateDto.Type,
-                transactionCategoryCreateDto.Name, transactionCategoryCreateDto.Color,
-                transactionCategoryCreateDto.Icon);
-            await _transactionCategoryRepository.CreateAsync(transaction);
+            var transactionCategory = new TransactionCategory(dto.Workspace, dto.Type, dto.Name, dto.Color, dto.Icon);
+            await _transactionCategoryRepository.CreateAsync(transactionCategory);
             await _uow.CommitAsync();
             tx.Complete();
         }
 
-        public async Task Update(TransactionCategoryUpdateDto transactionCategoryUpdateDto)
+        public async Task Update(TransactionCategory transactionCategory, TransactionCategoryUpdateDto dto)
         {
             using var tx = TransactionScopeHelper.GetInstance();
-
-            var transaction =
-                await _transactionCategoryRepository.FindAsync(transactionCategoryUpdateDto.TransactionCategoryId) ?? throw new TransactionCategoryNotFoundException();
-            transaction.UpdateName(transactionCategoryUpdateDto.Name);
-            transaction.UpdateColor(transactionCategoryUpdateDto.Color);
-            transaction.UpdateIcon(transactionCategoryUpdateDto.Icon);
-
-            _transactionCategoryRepository.Update(transaction);
+            transactionCategory.Update(dto.Name, dto.Color, dto.Icon, dto.Type);
+            _transactionCategoryRepository.Update(transactionCategory);
             await _uow.CommitAsync();
             tx.Complete();
         }
 
-        public async Task Delete(long transactionCategoryId)
+        public async Task Delete(TransactionCategory transactionCategory)
         {
             using var tx = TransactionScopeHelper.GetInstance();
-
-            var transaction =
-                await _transactionCategoryRepository.FindAsync(transactionCategoryId) ??
-                throw new TransactionCategoryNotFoundException();
-
-            _transactionCategoryRepository.Delete(transaction);
+            _transactionCategoryRepository.Delete(transactionCategory);
             await _uow.CommitAsync();
             tx.Complete();
         }
