@@ -100,8 +100,9 @@ namespace ExpenseTracker.Web.Controllers
             {
                 _logger.LogError(e, e.Message);
                 this.AddErrorMessage(e.Message);
-                return RedirectToAction(nameof(Index));
             }
+
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
