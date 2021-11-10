@@ -11,7 +11,7 @@ APP_HELPER.Loaded(() => {
 });
 APP_HELPER.InitializeSingleTypeahead = (elem) => {
     new TomSelect(elem, {
-        // plugins: ['change_listener'],
+        plugins: ['change_listener'],
         allowEmptyOption: true,
         placeholder: elem.dataset.placeholder ?? "Select an option",
         render: {
@@ -45,5 +45,4 @@ APP_HELPER.ReplaceTypeaheadOptions = (elem, options) => {
     elem.tomselect.clear();
     elem.tomselect.clearOptions();
     elem.tomselect.addOptions(options);
-    elem.dispatchEvent(new Event('change'));
 };
