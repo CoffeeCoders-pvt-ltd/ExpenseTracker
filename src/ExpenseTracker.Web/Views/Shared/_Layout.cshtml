@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="~/dist/css/tabler-payments.min.css" />
     <link rel="stylesheet" href="~/dist/css/tabler-vendors.min.css" />
     <link rel="stylesheet" href="~/dist/css/demo.min.css" />
-    
+
     <link rel="stylesheet" href="~/dist/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="~/lib/notyf/notyf.min.css">
     <link rel="stylesheet" href="~/dist/libs/tom-select/dist/tom-select.css">
@@ -159,8 +159,11 @@
     <script src="~/lib/notyf/notyf.min.js"></script>
     <script src="~/dist/libs/tom-select/dist/js/tom-select.base.min.js"></script>
     <script src="~/js/Helper/NotifyHelper.js" asp-append-version="true"></script>
-    @await Component.InvokeAsync("Notify").ConfigureAwait(true)
+    <script src="~/lib/ccache/ccache.js" asp-append-version="true"></script>
+    <script src="~/js/Helper/IconPicker.js" asp-append-version="true"></script>
     <script src="~/js/app.js" asp-append-version="true"></script>
+    @await Component.InvokeAsync("Notify").ConfigureAwait(true)
+
     <!--    Section Scripts-->
     @await RenderSectionAsync("Scripts", required: false).ConfigureAwait(true)
 
@@ -169,6 +172,7 @@
     <script>
         APP_HELPER.Loaded(() => {
             APP_HELPER.InitializeTypeahead();
+            APP_HELPER.InitializeIconPickers();
         });
     </script>
 

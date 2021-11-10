@@ -35,9 +35,39 @@ APP_HELPER.InitializeSingleTypeahead = (elem) => {
 };
 
 APP_HELPER.InitializeTypeahead = () => {
-    const elems = document.querySelectorAll('select:not(.ignore-typeahead');
+    const elems = document.querySelectorAll('select:not(.ignore-typeahead)');
     for (const elem of elems) {
         APP_HELPER.InitializeSingleTypeahead(elem);
+    }
+};
+
+APP_HELPER.InitializeIconPickers = async () => {
+    const elems = document.querySelectorAll('.icon-picker');
+    for (const elem of elems) {
+        const icons = await IconPicker.GetIcons();
+        new TomSelect(elem, {
+            plugins: ['change_listener'],
+            options: icons.map(x => ({ icon: x, value: x, text: x })),
+            allowEmptyOption: true,
+            placeholder: elem.dataset.placeholder ?? "Select an option",
+            render: {
+                option: function (data, escape) {
+                    const icon = data.icon ? `<i class="${data.icon}"></i>  ` : '';
+                    return '<div>' +
+                        '<span class="title">' + icon + escape(data.text) + '</span>' +
+                        '</div>';
+                },
+                item: function (data, escape) {
+                    const icon = data.icon ? `<i class="${data.icon}"></i>  ` : '';
+                     return '<div>' +
+                        '<span class="title">' + icon + escape(data.text) + '</span>' +
+                        '</div>';
+                },
+                no_results:function(data,escape) {
+                    return '<div class="no-results"> 😟 No results found for "'+escape(data.input)+'"</div>';
+                },
+            }
+        });
     }
 };
 
