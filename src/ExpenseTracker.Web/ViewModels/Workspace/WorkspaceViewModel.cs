@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using ExpenseTracker.Core.Entities.Common;
 
@@ -11,13 +12,16 @@ namespace ExpenseTracker.Web.ViewModels.Workspace
         [MinLength(3)]
         public string WorkspaceName { get; set; }
 
-        [Display(Name="Color")]
+        [Display(Name = "Color")]
         public string Color { get; set; }
-        
+
         public readonly Dictionary<string, string> ColorList = Colors.GetColors;
 
         [Display(Name = "Description")]
         public string? Description { get; set; }
-        
+
+        [DisplayName("Icon")]
+        public string Icon { get; set; }
+
     }
 }

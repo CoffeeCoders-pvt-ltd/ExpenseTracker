@@ -16,5 +16,8 @@ namespace ExpenseTracker.Web.ViewModels.Workspace
         public readonly Dictionary<string, string> ColorList = Colors.GetColors;
         [DisplayName("Description")]
         public string? Description { get; set; }
+
+        [DisplayName("Icon")]
+        public string Icon { get; set; }
     }
 }

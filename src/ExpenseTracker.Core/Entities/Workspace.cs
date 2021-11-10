@@ -16,6 +16,7 @@ namespace ExpenseTracker.Core.Entities
         public string WorkSpaceName { get; protected set; }
         public string Color { get; protected set; }
         public string? Description { get; protected set; }
+        public string? Icon { get; protected set; }
 
         public virtual User User { get; protected set; }
         public long UserId { get; protected set; }
@@ -26,23 +27,20 @@ namespace ExpenseTracker.Core.Entities
         {
         }
 
-        public static Workspace Create(User user, string workspaceName, string color)
-        {
-            return new Workspace(user, workspaceName, color);
-        }
-
-        private Workspace(User user, string workSpaceName, string color)
+        public Workspace(User user, string workSpaceName, string color, string icon)
         {
             ChangeName(workSpaceName);
             ChangeColor(color);
             AssignUser(user);
+            Icon = icon;
         }
 
-        public void Update(string workspaceName, string color, string? description)
+        public void Update(string workspaceName, string color, string? description, string icon)
         {
             WorkSpaceName = workspaceName;
             Color = color;
             Description = description;
+            Icon = icon;
         }
 
         public void ChangeName(string name)
@@ -59,11 +57,11 @@ namespace ExpenseTracker.Core.Entities
             Color = color;
         }
 
-        public  void SetAsDefaultWorkspace() => WorkspaceType = TypeDefaultWorkspace;
+        public void SetAsDefaultWorkspace() => WorkspaceType = TypeDefaultWorkspace;
 
-        public  bool IsDefault => WorkspaceType == TypeDefaultWorkspace;
+        public bool IsDefault => WorkspaceType == TypeDefaultWorkspace;
 
-        public  void SetAsNormalWorkspace() => WorkspaceType = TypeNormalWorkspace;
+        public void SetAsNormalWorkspace() => WorkspaceType = TypeNormalWorkspace;
 
         private void AssignUser(User user)
         {

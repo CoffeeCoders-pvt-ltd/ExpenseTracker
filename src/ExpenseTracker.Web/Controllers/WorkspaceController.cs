@@ -46,19 +46,20 @@ namespace ExpenseTracker.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(WorkspaceViewModel workspaceViewModel)
+        public async Task<IActionResult> Create(WorkspaceViewModel vm)
         {
             try
             {
-                if (!ModelState.IsValid) return View(workspaceViewModel);
+                if (!ModelState.IsValid) return View(vm);
 
                 var currentUser = await GetCurrentUser();
                 var workspaceDto = new WorkspaceCreateDto()
                 {
                     UserId = currentUser.Id,
-                    Color = workspaceViewModel.Color,
-                    Name = workspaceViewModel.WorkspaceName,
-                    Description = workspaceViewModel.Description
+                    Color = vm.Color,
+                    Name = vm.WorkspaceName,
+                    Description = vm.Description,
+                    Icon = vm.Icon
                 };
 
                 await _workspaceService.Create(workspaceDto);
@@ -87,7 +88,8 @@ namespace ExpenseTracker.Web.Controllers
                 {
                     Color = workspace.Color,
                     Name = workspace.WorkSpaceName,
-                    Description = workspace.Description
+                    Description = workspace.Description,
+                    Icon = workspace.Icon
                 };
                 return View(workspaceEditVm);
             }
@@ -99,17 +101,18 @@ namespace ExpenseTracker.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(long id, WorkspaceEditViewModel workspaceEditViewModel)
+        public async Task<IActionResult> Edit(long id, WorkspaceEditViewModel vm)
         {
             try
             {
-                if (!ModelState.IsValid) return View(workspaceEditViewModel);
+                if (!ModelState.IsValid) return View(vm);
                 var workspace = await _workspaceRepository.FindOrThrowAsync(id);
                 var updateDto = new WorkspaceUpdateDto()
                 {
-                    Color = workspaceEditViewModel.Color,
-                    Name = workspaceEditViewModel.Name,
-                    Description = workspaceEditViewModel.Description
+                    Color = vm.Color,
+                    Name = vm.Name,
+                    Description = vm.Description,
+                    Icon = vm.Icon
                 };
                 await _workspaceService.Update(workspace,updateDto);
                 this.AddSuccessMessage("Workspace updated");

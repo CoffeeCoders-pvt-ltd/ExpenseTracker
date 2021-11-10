@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ExpenseTracker.Web.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -12,13 +13,16 @@ namespace ExpenseTracker.Web.Controllers.Api
     [Route("api/[controller]")]
     public class IconController : ControllerBase
     {
-        public  IActionResult Index()
+        private readonly Icons icons;
+        public IconController(Icons icons)
         {
-            var rootPath = Directory.GetCurrentDirectory();
-            var path = Path.Combine(rootPath, "IconsList.json");
-            var icons = JsonConvert.DeserializeObject<List<string>>(System.IO.File.ReadAllText(path));
-            return Ok(new {
-                data = icons
+            this.icons = icons;
+        }
+        public IActionResult Index()
+        {
+            return Ok(new
+            {
+                data = icons.Items
             });
         }
     }

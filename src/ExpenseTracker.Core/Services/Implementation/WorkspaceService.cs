@@ -26,15 +26,15 @@ namespace ExpenseTracker.Core.Services.Implementation
             _uow = uow;
         }
 
-        public async Task Create(WorkspaceCreateDto workspaceCreateDto)
+        public async Task Create(WorkspaceCreateDto dto)
         {
             using var tx = TransactionScopeHelper.GetInstance();
 
-            var user = await _userRepository.FindAsync(workspaceCreateDto.UserId) ??
+            var user = await _userRepository.FindAsync(dto.UserId) ??
                        throw new Exception("User not found exception");
 
-            var workspace = Workspace.Create(user, workspaceCreateDto.Name, workspaceCreateDto.Color);
-
+            var workspace = new Workspace(user,dto.Name, dto.Color, dto.Icon);
+            
             if (user.HasWorkspace && user.Workspaces.Count > 1)
             {
                 workspace.SetAsNormalWorkspace();
@@ -49,10 +49,10 @@ namespace ExpenseTracker.Core.Services.Implementation
             tx.Complete();
         }
 
-        public async Task Update(Workspace workspace, WorkspaceUpdateDto workspaceUpdateDto)
+        public async Task Update(Workspace workspace, WorkspaceUpdateDto dto)
         {
             using var tx = TransactionScopeHelper.GetInstance();
-            workspace.Update(workspaceUpdateDto.Name, workspaceUpdateDto.Color, workspaceUpdateDto.Description);
+            workspace.Update(dto.Name, dto.Color, dto.Description, dto.Icon);
             _workspaceRepository.Update(workspace);
             await _uow.CommitAsync();
             tx.Complete();
