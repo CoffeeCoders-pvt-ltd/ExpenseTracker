@@ -28,7 +28,7 @@
 
 <body class="antialiased">
     <div class="wrapper">
-        <partial name="_Header"/>
+        <partial name="_Header" />
         <div class="page-wrapper">
             <div class="container-xl">
 
@@ -153,8 +153,10 @@
     </div>
     <!-- Libs JS -->
     <script src="~/dist/js/tabler.min.js" asp-append-version="true"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js" asp-append-version="true"></script>
+    <script src="~/dist/libs/tom-select/dist/js/tom-select.base.min.js"></script>
     <script src="~/js/Helper/NotifyHelper.js" asp-append-version="true"></script>
     @await Component.InvokeAsync("Notify").ConfigureAwait(true)
     <script src="~/js/app.js" asp-append-version="true"></script>
@@ -162,6 +164,19 @@
     @await RenderSectionAsync("Scripts", required: false).ConfigureAwait(true)
 
     @await RenderSectionAsync("_ValidationScriptsPartial", false)
+
+    <script>
+        document.addEventListener('DOMContentLoaded', e => {
+            const elems = document.querySelectorAll('select:not(.ignore-typeahead');
+            for (const elem of elems) {
+                new TomSelect(elem, {
+                    allowEmptyOption: true,
+                    placeholder: elem.dataset.placeholder ?? "Select an option",
+                });
+            }
+
+        })
+    </script>
 
 </body>
 
