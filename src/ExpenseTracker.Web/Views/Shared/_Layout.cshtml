@@ -166,16 +166,9 @@
     @await RenderSectionAsync("_ValidationScriptsPartial", false)
 
     <script>
-        document.addEventListener('DOMContentLoaded', e => {
-            const elems = document.querySelectorAll('select:not(.ignore-typeahead');
-            for (const elem of elems) {
-                new TomSelect(elem, {
-                    allowEmptyOption: true,
-                    placeholder: elem.dataset.placeholder ?? "Select an option",
-                });
-            }
-
-        })
+        APP_HELPER.Loaded(() => {
+            APP_HELPER.InitializeTypeahead();
+        });
     </script>
 
 </body>
