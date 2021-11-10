@@ -39,13 +39,5 @@ namespace ExpenseTracker.Core.Entities
             Icon = icon;
             Type = type;
         }
-
-
-        public virtual void UpdateName(string name) => CategoryName = name;
-
-
-        public virtual void UpdateColor(string color) => Color = color;
-
-        public virtual void UpdateIcon(string icon) => Icon = icon;
     }
 }
