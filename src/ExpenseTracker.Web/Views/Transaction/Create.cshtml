@@ -95,10 +95,10 @@
                     <div class="col input-group">
                         <input type="file" class="form-control" id="TransactionFile" asp-for="TransactionFile">
                         <div class="btn-group">
-                            <a type="button" class="btn btn-primary" id="file-viewer" data-bs-toggle="offcanvas"
+                            <button type="button" class="btn btn-primary" id="file-viewer" data-bs-toggle="offcanvas"
                                data-bs-target="#image-preview-modal">
                                 <i class="fa fa-eye"></i>&nbsp; View
-                            </a>
+                            </button>
                             <button type="button" class="btn btn-danger" id="clear-file">
                                 <i class="fas fa-broom"></i> Clear
                             </button>
@@ -165,7 +165,10 @@
     const filePreviewElem = document.querySelector("#file-viewer");
     const imageLoaderElem = document.querySelector("#image-preview");
     const clearElem = document.querySelector("#clear-file");
-    let flag = false;
+    
+    function previewPdf(e) {
+        window.open(filePreviewElem.dataset.href, '_blank');
+    };
 
     transactionFileElem.addEventListener('change', function (e) {
         const file = e.target.files[0];
@@ -178,28 +181,26 @@
 
         reader.addEventListener('load', async function () {
             const url = await fetch(reader.result).then(res => res.blob()).then(x => URL.createObjectURL(x));
-            const IsPDF = validatePDF(file);
-            if (IsPDF) {
+            if (isPdf(file)) {
+                filePreviewElem.dataset.href = url;
                 filePreviewElem.removeAttribute('data-bs-target');
                 filePreviewElem.removeAttribute('data-bs-toggle');
-                filePreviewElem.setAttribute('href', url);
-                filePreviewElem.setAttribute('target', '_blank');
-                flag = true;
-            } else if (flag) {
+                filePreviewElem.removeEventListener('click', previewPdf);
+                filePreviewElem.addEventListener('click', previewPdf);
+            } else {
+                filePreviewElem.removeEventListener('click', previewPdf);
                 filePreviewElem.setAttribute('data-bs-target', '#image-preview-modal');
-                filePreviewElem.setAttribute('data-bs-toggle', 'modal');
-                filePreviewElem.removeAttribute('href', url);
-                filePreviewElem.removeAttribute('target', '_blank');
-                flag = false;
+                filePreviewElem.setAttribute('data-bs-toggle', 'offcanvas');
+                filePreviewElem.dataset.href = null;
             }
             imageLoaderElem.src = reader.result;
         });
         reader.readAsDataURL(file);
     });
 
-    function validatePDF(file) {
+    function isPdf(file) {
         const fileExtension = file.name.split('.').pop();
-        if (fileExtension === 'pdf') return true;
+        return fileExtension === 'pdf';
     }
 
     function validaImage(file) {
