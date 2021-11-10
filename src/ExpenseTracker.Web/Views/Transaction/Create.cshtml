@@ -75,7 +75,7 @@
                     <label asp-for="TransactionCategoryId" class="form-label col-3 col-form-label"></label>
                     <div class="col">
                         <select asp-for="TransactionCategoryId" asp-items="Model.TransactionCategoriesSelectList"
-                            class="form-control">
+                            class="form-control" data-placeholder="Select category">
                         </select>
                     </div>
                 </div>
@@ -92,32 +92,20 @@
                 </div>
                 <div class="form-group mb-3 row">
                     <label asp-for="TransactionFile" class="form-label col-3 col-form-label"></label>
-                    <div class="col">
+                    <div class="col input-group">
                         <input type="file" class="form-control" id="TransactionFile" asp-for="TransactionFile">
-                        <span asp-validation-for="TransactionFile" class="text-danger"></span>
-                    </div>
-                    <div class="col-1">
-                        <a type="button" class="btn btn-primary" id="file-viewer" data-bs-toggle="offcanvas"
-                            data-bs-target="#image-preview-modal">
-                            <i class="fa fa-eye"></i>&nbsp; View
-                        </a>
-                    </div>
-                    <div class="col-1">
-                        <button type="button" class="btn btn-danger" id="clear-file">
-                            <i class="fas fa-broom"></i> Clear
-                        </button>
-                    </div>
-                    <div class="offcanvas offcanvas-end" id="image-preview-modal" tabindex="-1"
-                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="offcanvas-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Transaction Proof</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary" id="file-viewer" data-bs-toggle="offcanvas"
+                                data-bs-target="#image-preview-modal">
+                                <i class="fa fa-eye"></i>&nbsp; View
+                            </button>
+                            <button type="button" class="btn btn-danger" id="clear-file">
+                                <i class="fas fa-broom"></i> Clear
                             </button>
                         </div>
-                        <div class="offcanvas-body">
-                            <img id="image-preview" src="" alt="" />
-                        </div>
                     </div>
+                        <span asp-validation-for="TransactionFile" class="text-danger"></span>
+
                 </div>
                 <div class="form-group mb-3 row">
                     <label asp-for="Description" class="form-label col-3 col-form-label"></label>
@@ -132,7 +120,18 @@
         </div>
     </div>
 </div>
-
+<!-- Offcanvas for Proof display -->
+<div class="offcanvas offcanvas-end" id="image-preview-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="offcanvas-header">
+        <h5 class="modal-title" id="exampleModalLabel">Transaction Proof</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
+        </button>
+    </div>
+    <div class="offcanvas-body">
+        <img id="image-preview" src="" alt="" />
+    </div>
+</div>
 @section Styles
 {
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -164,7 +163,6 @@
                     function (index, value) {
                         $('#TransactionCategoryId').append(`<option value="${value.id}">${value.categoryName}</option>`);
                     });
-                $('#TransactionCategoryId').select2();
             },
             error: function (errorResponse) {
                 console.log(errorResponse);
@@ -191,8 +189,6 @@
 
 
     fetchAndUpdateCategoriesList();
-
-    $('#TransactionCategoryId').select2();
 
     const transactionFileElem = document.querySelector('#TransactionFile');
     const filePreviewElem = document.querySelector("#file-viewer");
