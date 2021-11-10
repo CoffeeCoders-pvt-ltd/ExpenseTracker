@@ -15,23 +15,25 @@ namespace ExpenseTracker.Web.Controllers
     public class ReportController : Controller
     {
         private readonly ITransactionRepository _transactionRepository;
-        private readonly IUserProvider userProvider;
+        private readonly IUserProvider _userProvider;
 
         public ReportController(ITransactionRepository transactionRepository, IUserProvider userProvider)
         {
-            this.userProvider = userProvider;
+            _userProvider = userProvider;
             _transactionRepository = transactionRepository;
         }
+
         // GET
         public async Task<IActionResult> Index(ReportViewModel reportViewModel)
         {
-            var workspaceToken = (await this.GetCurrentUser()).DefaultWorkspace.Token;
+            var workspaceToken = (await _userProvider.GetCurrentUser()).DefaultWorkspace.Token;
             var transactionQueryable =
                 _transactionRepository.GetPredicatedQueryable(a => a.Workspace.Token == workspaceToken);
 
             if (reportViewModel.TransactionDate != null)
             {
-                transactionQueryable = transactionQueryable.Where(a => a.TransactionDate.Date == reportViewModel.TransactionDate.Value.Date);
+                transactionQueryable = transactionQueryable.Where(a =>
+                    a.TransactionDate.Date == reportViewModel.TransactionDate.Value.Date);
             }
             else
             {
@@ -46,17 +48,21 @@ namespace ExpenseTracker.Web.Controllers
 
         public async Task<IActionResult> Monthly(ReportViewModel reportViewModel)
         {
-            var workspaceToken = (await this.GetCurrentUser()).DefaultWorkspace.Token;
+            var workspaceToken = (await _userProvider.GetCurrentUser()).DefaultWorkspace.Token;
             var transactionQueryable =
                 _transactionRepository.GetPredicatedQueryable(a => a.Workspace.Token == workspaceToken);
 
             if (reportViewModel.FromDate != null && reportViewModel.ToDate != null)
             {
-                transactionQueryable = transactionQueryable.Where(a => a.TransactionDate.Date >= reportViewModel.FromDate.Value.Date && a.TransactionDate.Date <= reportViewModel.ToDate.Value.Date);
+                transactionQueryable = transactionQueryable.Where(a =>
+                    a.TransactionDate.Date >= reportViewModel.FromDate.Value.Date &&
+                    a.TransactionDate.Date <= reportViewModel.ToDate.Value.Date);
             }
             else
             {
-                transactionQueryable = transactionQueryable.Where(a => a.TransactionDate.Date >= DateTime.Today.AddMonths(-1).Date && a.TransactionDate.Date <= DateTime.Today.Date);
+                transactionQueryable = transactionQueryable.Where(a =>
+                    a.TransactionDate.Date >= DateTime.Today.AddMonths(-1).Date &&
+                    a.TransactionDate.Date <= DateTime.Today.Date);
                 reportViewModel.FromDate = DateTime.Now.AddMonths(-1);
                 reportViewModel.ToDate = DateTime.Now;
             }
@@ -65,16 +71,5 @@ namespace ExpenseTracker.Web.Controllers
 
             return View(reportViewModel);
         }
-
-        private async Task<User> GetCurrentUser()
-        {
-            return await this.userProvider.GetCurrentUser();
-        }
-
-        private int GetCurrentUserId()
-        {
-            return this.userProvider.GetCurrentUserId();
-        }
-
     }
 }

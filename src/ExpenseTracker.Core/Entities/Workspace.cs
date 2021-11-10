@@ -27,7 +27,7 @@ namespace ExpenseTracker.Core.Entities
         {
         }
 
-        public Workspace(User user, string workSpaceName, string color, string icon)
+        public Workspace(User user, string workSpaceName, string color, string? icon)
         {
             ChangeName(workSpaceName);
             ChangeColor(color);
@@ -35,7 +35,7 @@ namespace ExpenseTracker.Core.Entities
             Icon = icon;
         }
 
-        public void Update(string workspaceName, string color, string? description, string icon)
+        public void Update(string workspaceName, string color, string? description, string? icon)
         {
             WorkSpaceName = workspaceName;
             Color = color;

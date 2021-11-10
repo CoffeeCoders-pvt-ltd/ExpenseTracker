@@ -21,7 +21,7 @@ namespace ExpenseTracker.Web.ViewModels.Workspace
         public string? Description { get; set; }
 
         [DisplayName("Icon")]
-        public string Icon { get; set; }
+        public string? Icon { get; set; }
 
     }
 }

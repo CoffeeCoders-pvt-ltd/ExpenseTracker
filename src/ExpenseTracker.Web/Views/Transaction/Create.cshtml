@@ -7,45 +7,45 @@
 
 @section PageTitle
 {
-<div class="page-header d-print-none">
-    <div class="row align-items-center">
-        <div class="col">
-            <!-- Page pre-title -->
-            <div class="page-pretitle">
-                Create
+    <div class="page-header d-print-none">
+        <div class="row align-items-center">
+            <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                    Create
+                </div>
+                <h2 class="page-title">
+                    @ViewData["Title"]
+                </h2>
             </div>
-            <h2 class="page-title">
-                @ViewData["Title"]
-            </h2>
-        </div>
-        <!-- Page title actions -->
-        <div class="col-auto ms-auto d-print-none">
-            <div class="btn-list">
-                <a asp-action="Index" asp-controller="Transaction" class="btn btn-default d-none d-sm-inline-block">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
-                    Cancel
-                </a>
-                <a asp-action="Index" asp-controller="Transaction"
-                    class="btn btn-default d-sm-none d-sm-inline-block btn-icon"
-                    aria-label="Create new Transaction Category">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
-                </a>
+            <!-- Page title actions -->
+            <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <a asp-action="Index" asp-controller="Transaction" class="btn btn-default d-none d-sm-inline-block">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                        Cancel
+                    </a>
+                    <a asp-action="Index" asp-controller="Transaction"
+                       class="btn btn-default d-sm-none d-sm-inline-block btn-icon"
+                       aria-label="Create new Transaction Category">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 }
 
 <div class="col-md-12">
@@ -59,14 +59,14 @@
                     <label asp-for="TransactionEntryDate" class="form-label col-3 col-form-label"></label>
                     <div class="col">
                         <input asp-for="TransactionEntryDate" class="form-control"
-                            value="@DateTime.Now.ToString("yyyy-MM-ddThh:mm")" />
+                               value="@DateTime.Now.ToString("yyyy-MM-ddThh:mm")"/>
                     </div>
                 </div>
                 <div class="form-group mb-3 row">
                     <label asp-for="Type" class="form-label col-3 col-form-label"></label>
                     <div class="col">
                         <select asp-for="Type" asp-items="Model.TransactionTypes" class="form-control"
-                            id="transactionType">
+                                id="transactionType">
                         </select>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                     <label asp-for="TransactionCategoryId" class="form-label col-3 col-form-label"></label>
                     <div class="col">
                         <select asp-for="TransactionCategoryId" asp-items="Model.TransactionCategoriesSelectList"
-                            class="form-control" data-placeholder="Select category">
+                                class="form-control" data-placeholder="Select category">
                         </select>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                             Rs.
                         </span>
                         <input type="number" asp-for="TransactionAmount" placeholder="Enter Transaction Amount"
-                            class="form-control" autofocus>
+                               class="form-control" autofocus>
                     </div>
                 </div>
                 <div class="form-group mb-3 row">
@@ -95,10 +95,10 @@
                     <div class="col input-group">
                         <input type="file" class="form-control" id="TransactionFile" asp-for="TransactionFile">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-primary" id="file-viewer" data-bs-toggle="offcanvas"
-                                data-bs-target="#image-preview-modal">
+                            <a type="button" class="btn btn-primary" id="file-viewer" data-bs-toggle="offcanvas"
+                               data-bs-target="#image-preview-modal">
                                 <i class="fa fa-eye"></i>&nbsp; View
-                            </button>
+                            </a>
                             <button type="button" class="btn btn-danger" id="clear-file">
                                 <i class="fas fa-broom"></i> Clear
                             </button>
@@ -122,19 +122,20 @@
 </div>
 <!-- Offcanvas for Proof display -->
 <div class="offcanvas offcanvas-end" id="image-preview-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
+     aria-hidden="true">
     <div class="offcanvas-header">
         <h5 class="modal-title" id="exampleModalLabel">Transaction Proof</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
         </button>
     </div>
     <div class="offcanvas-body">
-        <img id="image-preview" src="" alt="" />
+        <img id="image-preview" src="" alt=""/>
     </div>
 </div>
+
 @section Scripts
 {
-<script>
+    <script>
 
     __('#transactionType').addEventListener('change', function (e) {
         e.preventDefault();
@@ -179,10 +180,10 @@
             const url = await fetch(reader.result).then(res => res.blob()).then(x => URL.createObjectURL(x));
             const IsPDF = validatePDF(file);
             if (IsPDF) {
-                filePreviewElem.setAttribute('href', url);
-                filePreviewElem.setAttribute('target', '_blank');
                 filePreviewElem.removeAttribute('data-bs-target');
                 filePreviewElem.removeAttribute('data-bs-toggle');
+                filePreviewElem.setAttribute('href', url);
+                filePreviewElem.setAttribute('target', '_blank');
                 flag = true;
             } else if (flag) {
                 filePreviewElem.setAttribute('data-bs-target', '#image-preview-modal');

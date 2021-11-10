@@ -25,10 +25,7 @@ namespace ExpenseTracker.Web.Provider
             return userRepo.FindAsync(GetCurrentUserId());
         }
 
-        public int GetCurrentUserId()
-        {
-            return Convert.ToInt32(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-        }
-
+        public long GetCurrentUserId()
+            => Convert.ToInt32(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
     }
 }

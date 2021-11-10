@@ -1,10 +1,6 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using ExpenseTracker.Common.Constants;
-using ExpenseTracker.Common.Model;
 using ExpenseTracker.Core.Dto.Workspace;
-using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
@@ -51,8 +47,7 @@ namespace ExpenseTracker.Web.Controllers
             try
             {
                 if (!ModelState.IsValid) return View(vm);
-
-                var currentUser = await GetCurrentUser();
+                var currentUser = await _userProvider.GetCurrentUser();
                 var workspaceDto = new WorkspaceCreateDto()
                 {
                     UserId = currentUser.Id,
@@ -114,7 +109,7 @@ namespace ExpenseTracker.Web.Controllers
                     Description = vm.Description,
                     Icon = vm.Icon
                 };
-                await _workspaceService.Update(workspace,updateDto);
+                await _workspaceService.Update(workspace, updateDto);
                 this.AddSuccessMessage("Workspace updated");
                 return RedirectToAction(nameof(Index));
             }
@@ -138,11 +133,6 @@ namespace ExpenseTracker.Web.Controllers
             }
 
             return LocalRedirectPreserveMethod(redirectUrl);
-        }
-
-        private async Task<User> GetCurrentUser()
-        {
-            return await _userProvider.GetCurrentUser();
         }
 
         public async Task<IActionResult> Deactivate(long id)
@@ -176,7 +166,5 @@ namespace ExpenseTracker.Web.Controllers
                 return RedirectToAction("Index");
             }
         }
-
-        private int GetCurrentUserId() => _userProvider.GetCurrentUserId();
     }
 }

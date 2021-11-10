@@ -13,6 +13,7 @@ namespace ExpenseTracker.Web.Middleware
         private const string LoginUrl = "/Account/Login";
         private const string LoginApiUrl = "/Authentication/Login";
         private const string RegisterUrl = "/Account/Register";
+        private const string IconApiUrl = "/api/icon";
 
 
         private static readonly List<string> PathsToAvoid = new()
@@ -20,7 +21,8 @@ namespace ExpenseTracker.Web.Middleware
             LoginUrl,
             LoginApiUrl,
             WorkspaceCreateUrl,
-            RegisterUrl
+            RegisterUrl,
+            IconApiUrl
         };
 
         private readonly RequestDelegate _next;
@@ -30,7 +32,8 @@ namespace ExpenseTracker.Web.Middleware
             _next = next;
         }
 
-        public async Task Invoke(HttpContext httpContext, IUserProvider userProvider, IWorkspaceRepository workspaceRepository)
+        public async Task Invoke(HttpContext httpContext, IUserProvider userProvider,
+            IWorkspaceRepository workspaceRepository)
         {
             var currentRequestPath = httpContext.Request.Path;
 
