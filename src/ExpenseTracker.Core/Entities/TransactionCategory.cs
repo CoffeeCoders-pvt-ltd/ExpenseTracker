@@ -6,40 +6,38 @@ using ExpenseTracker.Core.Exceptions;
 
 namespace ExpenseTracker.Core.Entities
 {
-    [Table("transaction_category", Schema ="core")]
+    [Table("transaction_category", Schema = "core")]
     public class TransactionCategory : BaseModel
     {
-        public static TransactionCategory Create(string type,string name,string color,string icon)
+        public virtual Workspace Workspace { get; protected set; }
+        public long WorkspaceId { get; protected set; }
+        public string Type { get; protected set; }
+        public virtual List<Transaction> Transactions { get; set; } = new List<Transaction>();
+        public string CategoryName { get; protected set; }
+        public string Color { get; protected set; }
+        public string Icon { get; protected set; }
+
+        protected TransactionCategory()
         {
-            if (!TransactionType.IsValidType(type)) throw new InvalidTransactionTypeException(type);
-            
-            return new TransactionCategory(name,color,icon) {
-                Type = type
-            };
         }
 
-        protected TransactionCategory() { }
-        
-        private TransactionCategory(string categoryName,string color,string icon)
+        public TransactionCategory(Workspace workspace, string type, string categoryName, string color, string icon)
+        {
+            if (!TransactionType.IsValidType(type)) throw new InvalidTransactionTypeException(type);
+            Workspace = workspace;
+            Copy(categoryName, color, icon, type);
+        }
+
+        public void Update(string categoryName, string color, string icon, string type)
+            => Copy(categoryName, color, icon, type);
+
+
+        private void Copy(string categoryName, string color, string icon, string type)
         {
             CategoryName = categoryName;
             Color = color;
             Icon = icon;
+            Type = type;
         }
-
-        public virtual string CategoryName { get; protected set; }
-
-        public virtual void UpdateName(string name) => CategoryName = name;
-
-        public virtual string Color { get; protected set; }
-        public virtual void UpdateColor(string color) => Color = color;
-        public virtual string Icon { get; protected set; }
-        public virtual void UpdateIcon(string icon) => Icon = icon;
-
-        public virtual string Type { get; protected set; }
-
-        public virtual List<Transaction> Transactions { get; set; } = new List<Transaction>();
-
-        
     }
 }

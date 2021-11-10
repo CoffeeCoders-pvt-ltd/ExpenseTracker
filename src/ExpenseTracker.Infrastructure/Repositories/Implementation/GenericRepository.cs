@@ -27,6 +27,9 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
             => await FindAsync(id) ?? throw new Exception("Request item not found");
 
 
+        public Task<T> GetItemAsync(Expression<Func<T, bool>> predicate)
+            => _currentSession.FirstOrDefaultAsync(predicate);
+
         public void Delete(T entities)
         {
             _currentSession.Remove(entities);

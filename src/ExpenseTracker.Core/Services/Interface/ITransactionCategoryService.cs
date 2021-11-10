@@ -6,8 +6,8 @@ namespace ExpenseTracker.Core.Services.Interface
 {
     public interface ITransactionCategoryService
     {
-        Task Create(TransactionCategoryCreateDto transactionCategoryCreateDto);
-        Task Update(TransactionCategoryUpdateDto transactionCategoryUpdateDto);
+        Task Create(TransactionCategoryCreateDto dto);
+        Task Update(TransactionCategory transactionCategory, TransactionCategoryUpdateDto dto);
         Task Delete(TransactionCategory transactionCategory);
     }
 }

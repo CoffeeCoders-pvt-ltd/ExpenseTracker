@@ -12,9 +12,12 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
         {
         }
 
-        public async Task<IList<TransactionCategory>> GetByType(string type)
+        public async Task<IList<TransactionCategory>> GetByType(string type, long workspaceId)
         {
-            return await GetPredicatedQueryable(a => a.Type == type).ToListAsync();
+            return await GetPredicatedQueryable(a => a.Type == type && a.WorkspaceId == workspaceId).ToListAsync();
         }
+
+        public async Task<IList<TransactionCategory>> GetCategoriesGetByWorkspace(long workspaceId)
+            => await GetAllAsync(x => x.WorkspaceId == workspaceId);
     }
 }
