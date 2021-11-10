@@ -21,3 +21,8 @@
 .page-wrapper{
   min-height: 85vh;
 }
+
+
+.ts-control:not(.form-select) {
+  padding: 8px !important;
+}

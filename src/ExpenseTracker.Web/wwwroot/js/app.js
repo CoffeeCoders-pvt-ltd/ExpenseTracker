@@ -1,11 +1,17 @@
 ﻿const APP_HELPER = {};
 
+const __ = document.querySelector.bind(document);
+const _a = document.querySelectorAll.bind(document);
+
 APP_HELPER.Loaded = (callback) => {
     document.addEventListener('DOMContentLoaded', callback);
 };
-
+APP_HELPER.Loaded(() => {
+    // TomSelect.define('change_listener', window.change_listener)
+});
 APP_HELPER.InitializeSingleTypeahead = (elem) => {
     new TomSelect(elem, {
+        // plugins: ['change_listener'],
         allowEmptyOption: true,
         placeholder: elem.dataset.placeholder ?? "Select an option",
         render: {
@@ -20,7 +26,10 @@ APP_HELPER.InitializeSingleTypeahead = (elem) => {
                  return '<div>' +
                     '<span class="title">' + icon + escape(data.text) + '</span>' +
                     '</div>';
-            }
+            },
+            no_results:function(data,escape) {
+                return '<div class="no-results"> 😟 No results found for "'+escape(data.input)+'"</div>';
+            },
         }
     });
 };
@@ -30,4 +39,11 @@ APP_HELPER.InitializeTypeahead = () => {
     for (const elem of elems) {
         APP_HELPER.InitializeSingleTypeahead(elem);
     }
+};
+
+APP_HELPER.ReplaceTypeaheadOptions = (elem, options) => {
+    elem.tomselect.clear();
+    elem.tomselect.clearOptions();
+    elem.tomselect.addOptions(options);
+    elem.dispatchEvent(new Event('change'));
 };

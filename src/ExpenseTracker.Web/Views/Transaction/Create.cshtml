@@ -104,7 +104,7 @@
                             </button>
                         </div>
                     </div>
-                        <span asp-validation-for="TransactionFile" class="text-danger"></span>
+                    <span asp-validation-for="TransactionFile" class="text-danger"></span>
 
                 </div>
                 <div class="form-group mb-3 row">
@@ -132,24 +132,15 @@
         <img id="image-preview" src="" alt="" />
     </div>
 </div>
-@section Styles
-{
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-}
-
 @section Scripts
 {
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
 <script>
 
-    $('#transactionType').on('change', function (e) {
+    __('#transactionType').addEventListener('change', function (e) {
         e.preventDefault();
-
         fetchAndUpdateCategoriesList()
-
     });
-
+    const transactionCategoryElm = __("#TransactionCategoryId");
     function fetchAndUpdateCategoriesList() {
         let type = $('#transactionType').val();
         $.ajax({
@@ -158,35 +149,14 @@
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (response) {
-                $('#TransactionCategoryId').empty();
-                $.each(response,
-                    function (index, value) {
-                        $('#TransactionCategoryId').append(`<option value="${value.id}">${value.categoryName}</option>`);
-                    });
+                const options = response.map(i => ({ value: i.id, text: i.categoryName}));
+                APP_HELPER.ReplaceTypeaheadOptions(transactionCategoryElm, options);
             },
             error: function (errorResponse) {
                 console.log(errorResponse);
             }
         })
     }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        let el;
-        window.Choices && (new Choices(el = document.getElementById('transactionType'), {
-            classNames: {
-                containerInner: el.className,
-                input: 'form-control',
-                inputCloned: 'form-control-sm',
-                listDropdown: 'dropdown-menu',
-                itemChoice: 'dropdown-item',
-                activeState: 'show',
-                selectedState: 'active',
-            },
-            shouldSort: false,
-            searchEnabled: false,
-        }));
-    });
-
 
     fetchAndUpdateCategoriesList();
 
