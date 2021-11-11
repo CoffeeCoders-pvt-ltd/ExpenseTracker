@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection.Metadata;
 using System.Text;
+using ExpenseTracker.Common.Constants;
 using ExpenseTracker.Core;
 using ExpenseTracker.Infrastructure;
 using ExpenseTracker.Infrastructure.Extensions;
@@ -154,6 +155,12 @@ namespace ExpenseTracker.Web
             });
 
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, ContentConstant.Content)),
+                RequestPath = "/Content"
+            });
+            
             app.UseCookiePolicy();
 
             app.UseRouting();
