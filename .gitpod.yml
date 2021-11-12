@@ -1,13 +1,12 @@
-image: 
-  file: .gitpod.Dockerfile
+image: gitpod/workspace-dotnet
 
-# tasks:
-#   # Mitigation for https://github.com/gitpod-io/gitpod/issues/6460 
-#   - name: Postinstall .NET 6.0 and dev certificates
-#     init: |
-#       mkdir -p $DOTNET_ROOT && curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel $DOTNET_VERSION --install-dir $DOTNET_ROOT 
-#       dotnet dev-certs https 
-#       dotnet restore
+# List the ports you want to expose and what to do when they are served. See https://www.gitpod.io/docs/43_config_ports/
+ports:
+  - port: 5000
+    onOpen: ignore
+  - port: 5001
+    onOpen: open-preview
+    
 vscode:
   extensions:
     - muhammad-sammy.csharp
