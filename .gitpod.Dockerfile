@@ -1,10 +1,11 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /source
 
 USER gitpod
 
-ENV DOTNET_VERSION=6.0
-ENV DOTNET_ROOT=/workspace/.dotnet
-ENV PATH=$PATH:$DOTNET_ROOT
+# ENV DOTNET_VERSION=6.0
+# ENV DOTNET_ROOT=/workspace/.dotnet
+# ENV PATH=$PATH:$DOTNET_ROOT
 
 # FROM gitpod/workspace-full:latest
 
