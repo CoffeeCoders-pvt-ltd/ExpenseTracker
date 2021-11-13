@@ -8,8 +8,8 @@ ENV PATH=$PATH:$DOTNET_ROOT
 
 USER postgres
 
-RUN /etc/init.d/postgresql start &&\
-    psql --command "ALTER USER postgres WITH ENCRYPTED PASSWORD 'admin';"
+# RUN /etc/init.d/postgresql start &&\
+#     psql --command "ALTER USER postgres WITH ENCRYPTED PASSWORD 'admin';"
 
 # RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/12/main/pg_hba.conf
 
