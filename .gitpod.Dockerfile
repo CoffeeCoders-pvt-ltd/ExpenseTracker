@@ -6,8 +6,8 @@ ENV DOTNET_VERSION=5.0
 ENV DOTNET_ROOT=/workspace/.dotnet
 ENV PATH=$PATH:$DOTNET_ROOT
 
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
+RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 RUN apt-get update
 RUN apt-get install -y postgresql-12 postgresql-client-12
 
