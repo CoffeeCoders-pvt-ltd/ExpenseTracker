@@ -4,7 +4,7 @@ image:
 ports:
   - port: 5432
     onOpen: ignore
-  - port: 8099
+  - port: 8000-8999
     onOpen: open-preview
     visibility: public
 
