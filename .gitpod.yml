@@ -4,6 +4,9 @@ image:
 ports:
   - port: 5432
     onOpen: ignore
+  - port: 8099
+    onOpen: open-preview
+    visibility: public
 
 tasks:
   # Mitigation for https://github.com/gitpod-io/gitpod/issues/6460 
