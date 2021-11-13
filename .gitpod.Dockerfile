@@ -1,15 +1,10 @@
-FROM gitpod/workspace-full:latest
+FROM gitpod/workspace-postgres
 
 USER gitpod
 #.NET installed via .gitpod.yml task until the following issue is fixed: https://github.com/gitpod-io/gitpod/issues/5090
 ENV DOTNET_VERSION=5.0
 ENV DOTNET_ROOT=/workspace/.dotnet
 ENV PATH=$PATH:$DOTNET_ROOT
-
-RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list
-RUN apt-get update
-RUN apt-get install -y postgresql-12 postgresql-client-12
 
 USER postgres
 
