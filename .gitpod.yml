@@ -13,7 +13,7 @@ tasks:
     init: |
       mkdir -p $DOTNET_ROOT && curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel $DOTNET_VERSION --install-dir $DOTNET_ROOT 
       sudo apt install libnss3-tools
-      ./scripts/ubuntu-create-dotnet-cert
+      ./scripts/ubuntu-create-dotnet-cert.sh
       dotnet restore
 
 vscode:
